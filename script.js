@@ -1,28 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Gestion des boutons "voir le projet"
-    const projectButtons = document.querySelectorAll('.voir-projet');
-    projectButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Récupérer l'ID du projet depuis l'attribut data-project
-            const projectId = button.dataset.project;
-            
-            // Trouver le projet correspondant
-            const project = document.querySelector(`#${projectId}`);
-            
-            if (project) {
-                // Scroller doucement vers le projet
-                project.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    });
+    // Test si le script est chargé
+    console.log('Script chargé');
+    
+    // Gestion du menu mobile
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const body = document.body;
 
-    // Smooth scroll pour les liens de navigation
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
+    console.log('menuToggle:', menuToggle);
+    console.log('mobileMenu:', mobileMenu);
+
+    // Initialisation du menu fermé
+    if (mobileMenu) {
+        mobileMenu.classList.remove('active');
+        body.classList.remove('no-scroll');
+    }
+
+    // Gestion du bouton hamburger
+    if (menuToggle && mobileMenu) {
+        console.log('Écouteur ajouté au bouton');
+        menuToggle.addEventListener('click', () => {
+            console.log('Bouton cliqué');
+            mobileMenu.classList.toggle('active');
+            body.classList.toggle('no-scroll');
+        });
+    } else {
+        console.log('Impossible d\'ajouter l\'écouteur - menuToggle ou mobileMenu manquant');
+    }
+
+    // Fermer le menu quand on clique sur un lien
+    const asideAnchors = document.querySelectorAll('.aside-anchor');
+    console.log('Nombre de liens aside-anchor:', asideAnchors.length);
+    asideAnchors.forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
             e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
+            if (mobileMenu) {
+                mobileMenu.classList.remove('active');
+                body.classList.remove('no-scroll');
+            }
+            
+            // Scroller vers la section
+            const targetId = e.currentTarget.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
         });
     });
 });
