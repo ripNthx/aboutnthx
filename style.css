@@ -357,7 +357,9 @@ img {
     body {
         overflow-x: hidden;
     }
-    
+    .hero-visual {
+        display: none;
+    }
     .menu-toggle {
         display: flex;
         align-items: center;
