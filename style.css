@@ -98,22 +98,21 @@ textarea.valid {
     transition: all 0.15s ease-out;
     transition-property: width, height, background, border, opacity;
     mix-blend-mode: normal;
-    opacity: 0.8;
 }
 
 .cursor-follower {
-    width: 10px;
-    height: 10px;
-    background-color: #6c63ff; /* Couleur principale du thème */
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    z-index: 9998;
-    transition: all 0.2s ease-out;
-    transition-property: width, height, background, border, opacity;
-    mix-blend-mode: normal;
-    opacity: 0.6;
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--primary-color);
+    transition: transform 0.4s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+    z-index: 9999;
+}
+
+.cursor-follower.hovered {
+    width: 20px;
+    height: 20px;
+    background-color: #6c63ff;
+    opacity: 0.8;
 }
 
 .cursor.hovered {
@@ -146,6 +145,19 @@ body.dark-theme .cursor {
 
 body.dark-theme .cursor-follower {
     background-color: #7d75ff;
+}
+
+/* Désactiver le curseur personnalisé sur mobile */
+@media (max-width: 768px) {
+    .cursor,
+    .cursor-follower {
+        display: none !important;
+    }
+    
+    /* Rétablir le curseur par défaut sur les éléments interactifs */
+    a, button, [role="button"], input, textarea, select, label[for] {
+        cursor: pointer !important;
+    }
 }
 
 /* Désactiver le curseur par défaut */
@@ -341,6 +353,11 @@ img {
 
 /* Styles pour le menu mobile */
 @media (max-width: 768px) {
+
+    body {
+        overflow-x: hidden;
+    }
+    
     .menu-toggle {
         display: flex;
         align-items: center;
