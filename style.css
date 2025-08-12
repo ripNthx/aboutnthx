@@ -36,8 +36,8 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .fade-out {
@@ -45,8 +45,8 @@
 }
 
 @keyframes fadeOut {
-    from { opacity: 1; transform: translateX(-50%) translateY(0); }
-    to { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-20px); }
 }
 
 /* ===== FORM ERROR MESSAGES ===== */
@@ -1529,13 +1529,12 @@ body.dark-theme .nav-link {
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 50vh;
-    left: 6rem;
 }
 
 .about-section .container {
     position: relative;
     z-index: 2;
-    margin: 3rem;
+    margin-left: 0 auto;
 }
 
 .section-header {
@@ -2182,7 +2181,6 @@ body.dark-theme .nav-link {
     margin-bottom: 5rem;
     color: #2d2d2d;
     position: relative;
-    display: inline-block;
   }
 
   .section-title::after {
@@ -2393,7 +2391,6 @@ body.dark-theme .nav-link {
     position: relative;
     padding-bottom: 1rem;
     top: -5rem;
-    transform: translateX(150%);
 }
 
 .contact-section .section-subtitle {
