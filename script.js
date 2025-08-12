@@ -1,11 +1,48 @@
 // Variables globales
 let contactForm;
 const cursor = document.createElement('div');
+cursor.className = 'cursor';
 const cursorFollower = document.createElement('div');
+cursorFollower.className = 'cursor-follower';
 let mouseX = 0;
 let mouseY = 0;
 let posX = 0;
 let posY = 0;
+
+// Ajouter le curseur au DOM
+document.body.appendChild(cursor);
+document.body.appendChild(cursorFollower);
+
+// Fonction pour mettre à jour la position du curseur
+function updateCursor() {
+    posX += (mouseX - posX) / 5;
+    posY += (mouseY - posY) / 5;
+    
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+    cursorFollower.style.left = posX + 'px';
+    cursorFollower.style.top = posY + 'px';
+}
+
+// Écouter les mouvements de la souris
+document.addEventListener('mousemove', function(e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+
+// Mettre à jour le curseur à chaque frame
+requestAnimationFrame(updateCursor);
+
+// Gestion du survol des éléments
+document.addEventListener('mouseover', function(e) {
+    if (e.target.classList.contains('cursor-pointer')) {
+        cursor.classList.add('hovered');
+        cursorFollower.classList.add('hovered');
+    } else {
+        cursor.classList.remove('hovered');
+        cursorFollower.classList.remove('hovered');
+    }
+});
 
 // Fonction pour valider l'email
 function validateEmail(email) {
