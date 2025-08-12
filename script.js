@@ -82,8 +82,7 @@ function showPopup(message, isSuccess) {
 
 // Fonction d'initialisation du formulaire de contact
 function initContactForm() {
-    contactForm = document.getElementById('contactForm');
-    
+    const contactForm = document.getElementById('contactForm');
     if (!contactForm) {
         console.error('Le formulaire de contact n\'a pas été trouvé dans le DOM');
         return;
@@ -95,55 +94,71 @@ function initContactForm() {
         e.stopPropagation();
         
         // Réinitialiser les erreurs
-        const allInputs = contactForm.querySelectorAll('input, textarea');
-        allInputs.forEach(input => {
-            input.style.borderColor = '';
-        });
-        
-        // Valider les champs
+        const fieldsToValidate = contactForm.querySelectorAll('input[required], textarea[required]');
         let isValid = true;
-        const requiredFields = contactForm.querySelectorAll('[required]');
-        const emailField = contactForm.querySelector('input[type="email"]');
         
         // Validation des champs requis
-        requiredFields.forEach(field => {
+        fieldsToValidate.forEach(field => {
             if (!field.value.trim()) {
+                field.style.borderColor = '#ff6b6b';
                 isValid = false;
-                field.style.borderColor = '#ff4444';
             } else {
                 field.style.borderColor = '';
             }
         });
         
-        // Validation spécifique de l'email
-        if (emailField && emailField.value.trim() && !validateEmail(emailField.value.trim())) {
+        // Validation de l'email
+        const emailField = contactForm.querySelector('input[type="email"]');
+        if (emailField && !validateEmail(emailField.value)) {
+            emailField.style.borderColor = '#ff6b6b';
             isValid = false;
-            emailField.style.borderColor = '#ff4444';
-            showPopup('Veuillez entrer une adresse email valide', false);
-            return false;
         }
         
         if (!isValid) {
-            showPopup('Veuillez remplir tous les champs obligatoires', false);
-            return false;
+            showPopup('Veuillez remplir correctement tous les champs obligatoires', false);
+            return;
         }
         
-        // Si tout est valide, simuler l'envoi
+        // Si tout est valide, préparer les données pour EmailJS
         const submitBtn = contactForm.querySelector('.submit-btn');
-        const originalText = submitBtn.innerHTML;
         
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+        // Désactiver le bouton pendant l'envoi
         submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner"></span> Envoi en cours...';
         
-        // Simulation d'envoi
-        setTimeout(() => {
-            showPopup('Message envoyé avec succès !', true);
+        // Préparer les paramètres pour EmailJS
+        const templateParams = {
+            from_name: contactForm.querySelector('[name="name"]').value,
+            from_email: contactForm.querySelector('[name="email"]').value,
+            subject: 'Nouveau message depuis le portfolio',
+            message: contactForm.querySelector('[name="message"]').value
+        };
+        
+        // Envoyer l'email via EmailJS
+        emailjs.send(
+            'service_exde98a',  // Votre Service ID
+            'template_g23u835', // Votre Template ID
+            {
+                from_name: contactForm.querySelector('[name="name"]').value,
+                from_email: contactForm.querySelector('[name="email"]').value,
+                message: contactForm.querySelector('[name="message"]').value,
+                date: new Date().toLocaleDateString(),
+                title: 'Nouveau message du formulaire de contact'
+            }
+        )
+        .then(function(response) {
+            console.log('Email envoyé avec succès !', response.status, response.text);
+            showPopup('Votre message a été envoyé avec succès !', true);
             contactForm.reset();
-            submitBtn.innerHTML = originalText;
+        }, function(error) {
+            console.error('Erreur lors de l\'envoi de l\'email:', error);
+            showPopup('Une erreur est survenue. Veuillez réessayer plus tard.', false);
+        })
+        .finally(function() {
+            // Réactiver le bouton dans tous les cas
             submitBtn.disabled = false;
-        }, 1500);
-        
-        return false;
+            submitBtn.textContent = 'Envoyer le message';
+        });
     });
 }
 
