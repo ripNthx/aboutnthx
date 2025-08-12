@@ -1371,7 +1371,7 @@ body.dark-theme .nav-link {
 }
 
 .projects-grid {
-    display: grid;
+     display: grid;   /* a remettre si il y a plusieurs projets */
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
@@ -2774,4 +2774,8 @@ body.dark-theme .nav-link {
     padding: 15px 0;
     letter-spacing: 0.5px;
     text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+#titre-projets {
+    margin-bottom: 5vh;
+    top: 10vh;
 }
