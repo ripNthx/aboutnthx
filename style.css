@@ -1375,6 +1375,8 @@ body.dark-theme .nav-link {
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
+    position: relative;
+    margin-bottom: 10vh;
 }
 
 .project-card {
