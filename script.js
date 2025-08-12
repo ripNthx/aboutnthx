@@ -8,10 +8,47 @@ let mouseX = 0;
 let mouseY = 0;
 let posX = 0;
 let posY = 0;
+let lastScrollPosition = 0;
+const navbar = document.querySelector('.navbar');
+const navbarDefaultWidth = '200px';
+const navbarExpandedWidth = '700px';
 
 // Ajouter le curseur au DOM
 document.body.appendChild(cursor);
 document.body.appendChild(cursorFollower);
+
+// Gérer le défilement de la page
+window.addEventListener('scroll', function() {
+    const currentScrollPosition = window.pageYOffset;
+    
+    if (currentScrollPosition <= 50) {
+        // En haut de la page, on déploie la navbar
+        navbar.classList.add('expanded');
+    } else if (currentScrollPosition > lastScrollPosition && currentScrollPosition > 50) {
+        // Défilement vers le bas, on replie la navbar
+        navbar.classList.remove('expanded');
+    }
+    
+    lastScrollPosition = currentScrollPosition;
+});
+
+// Initialiser l'état de la navbar au chargement
+if (window.pageYOffset <= 50) {
+    navbar.classList.add('expanded');
+}
+
+// Gérer le survol de la navbar
+navbar.addEventListener('mouseenter', function() {
+    if (window.pageYOffset > 50) {
+        navbar.classList.add('expanded');
+    }
+});
+
+navbar.addEventListener('mouseleave', function() {
+    if (window.pageYOffset > 50) {
+        navbar.classList.remove('expanded');
+    }
+});
 
 // Fonction pour mettre à jour la position du curseur
 function updateCursor() {
@@ -32,6 +69,7 @@ document.addEventListener('mousemove', function(e) {
 
 // Mettre à jour le curseur à chaque frame
 requestAnimationFrame(updateCursor);
+
 
 // Gestion du survol des éléments
 document.addEventListener('mouseover', function(e) {
@@ -122,9 +160,10 @@ function initContactForm() {
         // Si tout est valide, préparer les données pour EmailJS
         const submitBtn = contactForm.querySelector('.submit-btn');
         
-        // Désactiver le bouton pendant l'envoi
+        // Désactiver le bouton pendant l'envoi et afficher l'animation
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span class="spinner"></span> Envoi en cours...';
+        submitBtn.classList.add('loading');
         
         // Préparer les paramètres pour EmailJS
         const templateParams = {
@@ -157,7 +196,8 @@ function initContactForm() {
         .finally(function() {
             // Réactiver le bouton dans tous les cas
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Envoyer le message';
+            submitBtn.innerHTML = '<span>Envoyer le message</span><i class="fas fa-paper-plane"></i>';
+            submitBtn.classList.remove('loading');
         });
     });
 }
@@ -241,47 +281,67 @@ function initCustomCursor() {
 function initHamburgerMenu() {
     // Éléments du DOM
     const body = document.body;
-    const menuToggle = document.querySelector('.menu-toggle');
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    const navLinksItems = document.querySelectorAll('.nav-link');
+    const hamburgerMenu = document.querySelector('.hamburger-menu');
+    const hamburgerIcon = document.querySelector('.hamburger-icon');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
     
     // Vérifier que tous les éléments nécessaires existent
-    if (!menuToggle || !hamburger || !navLinks) return;
+    if (!hamburgerMenu || !hamburgerIcon || !mobileMenu) return;
     
     // Fonction pour basculer le menu
     const toggleMenu = () => {
-        hamburger.classList.toggle('active');
-        navLinks.classList.toggle('active');
+        hamburgerIcon.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
         body.classList.toggle('menu-open');
+        
+        // Animation des liens du menu
+        if (mobileMenu.classList.contains('active')) {
+            document.querySelectorAll('.mobile-nav-links li').forEach((item, index) => {
+                item.style.transitionDelay = `${index * 0.1}s`;
+                item.style.opacity = '1';
+                item.style.transform = 'translateX(0)';
+            });
+        } else {
+            document.querySelectorAll('.mobile-nav-links li').forEach((item, index) => {
+                item.style.transitionDelay = '0s';
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(20px)';
+            });
+        }
     };
     
     // Fonction pour fermer le menu
     const closeMenu = () => {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('active');
+        hamburgerIcon.classList.remove('active');
+        mobileMenu.classList.remove('active');
         body.classList.remove('menu-open');
+        
+        // Réinitialiser l'animation des liens
+        document.querySelectorAll('.mobile-nav-links li').forEach(item => {
+            item.style.transitionDelay = '0s';
+            item.style.opacity = '0';
+            item.style.transform = 'translateX(20px)';
+        });
     };
     
     // Gestion du clic sur le bouton hamburger
-    menuToggle.addEventListener('click', (e) => {
+    hamburgerMenu.addEventListener('click', (e) => {
         e.stopPropagation();
         toggleMenu();
     });
     
     // Fermer le menu quand on clique sur un lien
-    navLinksItems.forEach(link => {
+    mobileNavLinks.forEach(link => {
         link.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                closeMenu();
-            }
+            closeMenu();
         });
     });
     
     // Fermer le menu quand on clique en dehors
     document.addEventListener('click', (e) => {
-        const isClickInside = navLinks.contains(e.target) || menuToggle.contains(e.target);
-        if (!isClickInside && navLinks.classList.contains('active')) {
+        const isClickInside = mobileMenu.contains(e.target) || hamburgerMenu.contains(e.target);
+        if (!isClickInside && mobileMenu.classList.contains('active')) {
             closeMenu();
         }
     });
@@ -295,11 +355,19 @@ function initHamburgerMenu() {
     
     window.addEventListener('resize', handleResize);
     
+    // Initialiser l'état des liens du menu
+    document.querySelectorAll('.mobile-nav-links li').forEach(item => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(20px)';
+    });
+    
     // Nettoyage des écouteurs d'événements si nécessaire
     return () => {
         window.removeEventListener('resize', handleResize);
-        menuToggle.removeEventListener('click', toggleMenu);
-        navLinksItems.forEach(link => {
+        if (hamburgerMenu) {
+            hamburgerMenu.removeEventListener('click', toggleMenu);
+        }
+        mobileNavLinks.forEach(link => {
             link.removeEventListener('click', closeMenu);
         });
     };
@@ -370,32 +438,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     spans[1].style.transform = 'rotate(0) translate(0, 0)';
                 }
             });
-        });
-    }
-    
-
-    
-    // Gestion du changement de thème
-    if (themeSwitch) {
-        // Vérifier le thème stocké ou la préférence système
-        const savedTheme = localStorage.getItem('theme') || 
-                          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        
-        // Appliquer le thème sauvegardé
-        if (savedTheme === 'dark') {
-            body.classList.add('dark-theme');
-            themeSwitch.checked = true;
-        }
-        
-        // Gérer le changement de thème
-        themeSwitch.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                body.classList.add('dark-theme');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                body.classList.remove('dark-theme');
-                localStorage.setItem('theme', 'light');
-            }
         });
     }
     

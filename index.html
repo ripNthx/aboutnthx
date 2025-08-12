@@ -10,24 +10,24 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="website-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="ChatGPT Image 12 août 2025, 15_41_47.png" sizes="32x32">
 <body>
+    <!-- Formes flottantes décoratives -->
+    <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+    </div>
+    
     <!-- Curseur personnalisé -->
     <div class="cursor"></div>
-    <div class="cursor-follower"></div>
 
-    <!-- Barre de navigation -->
+
+    <!-- Barre de navigation Bureau -->
     <nav class="navbar">
         <div class="navbar-container">
             <a href="#" class="logo">Nthx<span>.</span></a>
-            
-            <div class="menu-toggle">
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
             
             <ul class="nav-links">
                 <li><a href="#home" class="nav-link" data-text="Accueil">Accueil</a></li>
@@ -35,7 +35,30 @@
                 <li><a href="#projects" class="nav-link" data-text="Projets">Projets</a></li>
                 <li><a href="#contact" class="nav-link" data-text="Contact">Contact</a></li>
             </ul>
+        </div>
+    </nav>
+
+    <!-- Barre de navigation Mobile -->
+    <nav class="mobile-navbar">
+        <div class="mobile-navbar-container">
+            <a href="#" class="mobile-logo">Nthx<span>.</span></a>
             
+            <div class="hamburger-menu">
+                <div class="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mobile-menu">
+            <ul class="mobile-nav-links">
+                <li><a href="#home" class="mobile-nav-link" data-text="Accueil">Accueil</a></li>
+                <li><a href="#about" class="mobile-nav-link" data-text="À Propos">À Propos</a></li>
+                <li><a href="#projects" class="mobile-nav-link" data-text="Projets">Projets</a></li>
+                <li><a href="#contact" class="mobile-nav-link" data-text="Contact">Contact</a></li>
+            </ul>
         </div>
     </nav>
     <!-- Section Héros -->
@@ -65,7 +88,6 @@
                             <span class="floating-element html"><i class="fab fa-html5"></i></span>
                             <span class="floating-element css"><i class="fab fa-css3-alt"></i></span>
                             <span class="floating-element js"><i class="fab fa-js"></i></span>
-                            <span class="floating-element react"><i class="fab fa-react"></i></span>
                         </div>
                     </div>
                 </div>
@@ -80,7 +102,8 @@
     </section>
 
     <!-- Section À Propos -->
-    <section class="about-section" id="about">
+    <div id="about"></div>
+    <section class="about-section">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title" style="top: 0vh;" id="titre-a-propos">À Propos de Moi</h2>
@@ -189,8 +212,7 @@
     </section>
     
     <!-- Section Projets -->
-    <section class="projects-section">
-        <div id="projects"></div>
+    <section id="projects" class="projects-section">
         <div class="container">
             <h2 class="section-title">Mes Projets Récents</h2>
             <div class="projects-grid">
@@ -211,7 +233,6 @@
                         <div class="project-tech">
                             <span>Vue.js</span>
                             <span>js</span>
-                            <span>php</span>
                         </div>
                     </div>
                 </div>
@@ -246,7 +267,7 @@
                 <!-- Projet 3 -->
                 <div class="project-card">
                     <div class="project-image">
-                        <img src="https://via.placeholder.com/600x400/8B5CF6/ffffff?text=Projet+3" alt="Projet 3">
+                        <img src="" alt="">
                         <div class="project-links">
                             <p>En cours de développement</p>
                         </div>
@@ -367,7 +388,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <a href="#" class="logo">Nthx<span>.</span></a>
+                    <a href="#" id="footer-logo" class="logo">Nthx<span>.</span></a>
                     <p>Développeur passionné créant des expériences web exceptionnelles.</p>
                 </div>
                 
