@@ -73,7 +73,9 @@ requestAnimationFrame(updateCursor);
 
 // Gestion du survol des éléments
 document.addEventListener('mouseover', function(e) {
-    if (e.target.classList.contains('cursor-pointer')) {
+    // Vérifier si l'élément survolé ou l'un de ses parents a la classe cursor-pointer
+    const hoveredElement = e.target.closest('.cursor-pointer, a, button, .btn, [role="button"]');
+    if (hoveredElement) {
         cursor.classList.add('hovered');
         cursorFollower.classList.add('hovered');
     } else {
@@ -126,6 +128,59 @@ function initContactForm() {
         return;
     }
     
+    // Gestion des champs de formulaire
+    const emailInput = contactForm.querySelector('input[type="email"]');
+    
+    // Garder le label en haut s'il y a du contenu
+    function handleInputBlur(e) {
+        const input = e.target;
+        const label = input.nextElementSibling;
+        
+        if (input.value.trim() !== '') {
+            label.classList.add('active');
+        } else {
+            label.classList.remove('active');
+        }
+        
+        // Validation spécifique pour l'email
+        if (input.type === 'email' && input.value.trim() !== '') {
+            if (!validateEmail(input.value)) {
+                input.classList.add('invalid');
+                label.style.color = '#ff6b6b';
+            } else {
+                input.classList.remove('invalid');
+                label.style.color = '#000';
+            }
+        }
+    }
+    
+    // Appliquer aux champs existants
+    const inputs = contactForm.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        // Initialiser l'état actif si le champ a déjà une valeur
+        if (input.value.trim() !== '') {
+            input.nextElementSibling.classList.add('active');
+        }
+        
+        // Gérer le blur
+        input.addEventListener('blur', handleInputBlur);
+        
+        // Validation en temps réel pour l'email
+        if (input.type === 'email') {
+            input.addEventListener('input', function(e) {
+                if (e.target.value.trim() !== '') {
+                    if (!validateEmail(e.target.value)) {
+                        e.target.classList.add('invalid');
+                        e.target.nextElementSibling.style.color = '#ff6b6b';
+                    } else {
+                        e.target.classList.remove('invalid');
+                        e.target.nextElementSibling.style.color = '#000';
+                    }
+                }
+            });
+        }
+    });
+    
     // Gestion de la soumission du formulaire
     contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -147,9 +202,19 @@ function initContactForm() {
         
         // Validation de l'email
         const emailField = contactForm.querySelector('input[type="email"]');
-        if (emailField && !validateEmail(emailField.value)) {
-            emailField.style.borderColor = '#ff6b6b';
-            isValid = false;
+        if (emailField) {
+            if (emailField.value.trim() === '') {
+                emailField.style.borderColor = '#ff6b6b';
+                emailField.nextElementSibling.style.color = '#ff6b6b';
+                isValid = false;
+            } else if (!validateEmail(emailField.value)) {
+                emailField.style.borderColor = '#ff6b6b';
+                emailField.nextElementSibling.style.color = '#ff6b6b';
+                isValid = false;
+            } else {
+                emailField.style.borderColor = '';
+                emailField.nextElementSibling.style.color = '#000';
+            }
         }
         
         if (!isValid) {
@@ -189,9 +254,6 @@ function initContactForm() {
             console.log('Email envoyé avec succès !', response.status, response.text);
             showPopup('Votre message a été envoyé avec succès !', true);
             contactForm.reset();
-        }, function(error) {
-            console.error('Erreur lors de l\'envoi de l\'email:', error);
-            showPopup('Une erreur est survenue. Veuillez réessayer plus tard.', false);
         })
         .finally(function() {
             // Réactiver le bouton dans tous les cas
@@ -209,6 +271,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialiser le curseur personnalisé
     initCustomCursor();
+    
+    // Initialiser le sélecteur de langue
+    initLanguageSwitcher();
 });
 
 // Création des éléments du curseur
@@ -373,8 +438,146 @@ function initHamburgerMenu() {
     };
 }
 
+// Fonction pour basculer la langue avec animation
+function toggleLanguage(button) {
+    console.log('Toggle language called');
+    
+    const frContent = button.querySelector('[data-lang="fr"]');
+    const enContent = button.querySelector('[data-lang="en"]');
+    
+    if (!frContent || !enContent) {
+        console.error('Éléments de langue non trouvés', { frContent, enContent });
+        return;
+    }
+    
+    console.log('Contenu trouvé:', { frContent, enContent });
+    
+    const isFrench = window.getComputedStyle(frContent).display !== 'none';
+    console.log('Langue actuelle:', isFrench ? 'français' : 'anglais');
+    
+    // Désactiver le bouton pendant l'animation
+    button.disabled = true;
+    
+    if (isFrench) {
+        // Passer à l'anglais
+        frContent.classList.add('hide');
+        setTimeout(() => {
+            frContent.style.display = 'none';
+            enContent.style.display = 'flex';
+            setTimeout(() => {
+                enContent.classList.remove('hide');
+                updateLanguage('en');
+                button.disabled = false;
+            }, 10);
+        }, 300);
+    } else {
+        // Passer au français
+        enContent.classList.add('hide');
+        setTimeout(() => {
+            enContent.style.display = 'none';
+            frContent.style.display = 'flex';
+            setTimeout(() => {
+                frContent.classList.remove('hide');
+                updateLanguage('fr');
+                button.disabled = false;
+            }, 10);
+        }, 300);
+    }
+    
+    // Ajouter un effet de pulsation sur le bouton
+    button.classList.add('animate-pulse');
+    setTimeout(() => button.classList.remove('animate-pulse'), 500);
+}
+
+// Fonction pour mettre à jour la langue
+function updateLanguage(lang) {
+    console.log('Mise à jour de la langue vers:', lang);
+    document.documentElement.lang = lang;
+    localStorage.setItem('lang', lang);
+    
+    // Mettre à jour tous les boutons de langue
+    document.querySelectorAll('.language-btn, #mobile-language-toggle').forEach(btn => {
+        const fr = btn.querySelector('[data-lang="fr"]');
+        const en = btn.querySelector('[data-lang="en"]');
+        
+        if (fr && en) {
+            if (lang === 'en') {
+                fr.style.display = 'none';
+                en.style.display = 'flex';
+                fr.classList.remove('hide');
+                en.classList.remove('hide');
+            } else {
+                fr.style.display = 'flex';
+                en.style.display = 'none';
+                fr.classList.remove('hide');
+                en.classList.remove('hide');
+            }
+        }
+    });
+}
+
+// Gestion du changement de langue
+function initLanguageSwitcher() {
+    console.log('Initialisation des sélecteurs de langue...');
+    const languageToggles = [
+        document.getElementById('language-toggle'),
+        document.getElementById('mobile-language-toggle')
+    ].filter(Boolean); // Filtrer les boutons non trouvés
+    
+    if (languageToggles.length === 0) {
+        console.error('Aucun bouton de langue trouvé');
+        return;
+    }
+    
+    // Vérifier la langue sauvegardée
+    const savedLang = localStorage.getItem('lang') || 'fr';
+    console.log('Langue sauvegardée:', savedLang);
+    
+    // Mettre à jour l'affichage initial
+    updateLanguage(savedLang);
+    
+    // Initialiser les écouteurs d'événements
+    languageToggles.forEach(button => {
+        button.addEventListener('click', function(e) {
+            console.log('Clic sur le bouton de langue');
+            e.preventDefault();
+            toggleLanguage(button);
+        });
+    });
+    
+    // Définir la langue du document
+    document.documentElement.lang = savedLang || 'fr';
+    
+    console.log('Sélecteurs de langue initialisés');
+}
+
+// Gestion du bouton de retour en haut
+function initBackToTop() {
+    const backToTopButton = document.getElementById('back-to-top');
+    
+    // Afficher/cacher le bouton au défilement
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            backToTopButton.classList.add('visible');
+        } else {
+            backToTopButton.classList.remove('visible');
+        }
+    });
+    
+    // Défilement fluide vers le haut
+    backToTopButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
+
 // Initialisation au chargement du document
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialiser le bouton de retour en haut
+    initBackToTop();
     // Initialiser le curseur personnalisé
     initCustomCursor();
     
@@ -512,9 +715,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Démarrer l'animation après un court délai
         setTimeout(type, 1000);
         
-        // Démarrer l'animation après le délai initial
-        setTimeout(type, delay);
-        
         // Ajout de l'animation de clignotement du curseur
         const style = document.createElement('style');
         style.textContent = `
@@ -570,6 +770,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTypingEffect();
     initScrollAnimations();
     initContactForm();
+    initLanguageSwitcher();
     initMap();
     
     // Gestion du défilement fluide
@@ -858,28 +1059,52 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Formulaire soumis avec les données :', formData);
             console.log('Bouton de soumission :', submitBtn);
             
-            // Désactiver le bouton pendant l'envoi
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Envoi en cours...';
+            // Désactiver le bouton pendant l'envoi et ajouter la classe de chargement
+            const buttonText = 'Envoi en cours...';
+            submitBtn.innerHTML = `
+                <span class="btn-text">${buttonText}</span>
+                <span class="btn-spinner"></span>
+            `;
             submitBtn.disabled = true;
-            
-            // Simulation d'envoi (à remplacer par un vrai appel API)
+            // Délai pour permettre au navigateur de mettre à jour le DOM
             setTimeout(() => {
-                // Simulation de succès ou d'échec aléatoire pour la démo
-                const isSuccess = Math.random() > 0.3;
+                submitBtn.classList.add('btn-loading');
+            }, 10);
+            
+            try {
+                // Simulation d'envoi (à remplacer par un vrai appel API)
+                setTimeout(() => {
+                    // Simulation de succès ou d'échec aléatoire pour la démo
+                    const isSuccess = Math.random() > 0.3;
+                    
+                    if (isSuccess) {
+                        // Succès
+                        showPopup('Message envoyé avec succès ! Je vous recontacterai bientôt.', true);
+                        contactForm.reset();
+                    } else {
+                        // Échec
+                    }
+                }, 1500);
+            } catch (error) {
+                console.error('Erreur lors de l\'envoi du formulaire:', error);
+            } finally {
+                // S'assurer que le bouton est toujours réinitialisé
+                // Fonction pour réinitialiser le bouton
+                const resetButton = () => {
+                    submitBtn.classList.remove('btn-loading');
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                };
                 
-                if (isSuccess) {
-                    // Succès
-                    showPopup('Message envoyé avec succès ! Nous vous recontacterons bientôt.', true);
-                    contactForm.reset();
+                // Si le bouton est toujours dans le DOM, on le réinitialise
+                if (document.body.contains(submitBtn)) {
+                    // Attendre un court instant pour permettre l'animation de sortie
+                    setTimeout(resetButton, 300);
                 } else {
-                    // Échec
-                    showPopup('Une erreur est survenue. Veuillez réessayer plus tard.', false);
+                    // Si le bouton n'est plus dans le DOM, on le réinitialise immédiatement
+                    resetButton();
                 }
-                
-                // Réactiver le bouton
-                submitBtn.innerHTML = originalBtnText;
-                submitBtn.disabled = false;
-            }, 1500);
+            }
             
             // Empêcher la soumission réelle du formulaire
             return false;
