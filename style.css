@@ -128,99 +128,7 @@ textarea.valid {
     border-color: #4CAF50 !important;
 }
 
-/* ===== CURSOR STYLES ===== */
 
-.cursor-follower {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: 3px solid transparent;
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)) border-box;
-    -webkit-mask: 
-        linear-gradient(#fff 0 0) padding-box, 
-        linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
-    position: fixed;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    transition: all 0.3s ease-out;
-    z-index: 9999;
-}
-
-.cursor-follower.hovered {
-    width: 40px;
-    height: 40px;
-    border: none;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color))
-}
-
-.cursor.hovered {
-    width: 40px;
-    height: 40px;
-    background-color: rgba(108, 99, 255, 0.2);
-    border-color: #6c63ff;
-    opacity: 0.9;
-}
-
-.cursor-follower.hovered {
-    width: 20px;
-    height: 20px;
-    opacity: 0.8;
-    border: none;
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    -webkit-mask: none;
-    mask: none;
-}
-
-/* Amélioration de la visibilité sur fond clair/sombre */
-body.light-theme .cursor {
-    border-color: #6c63ff;
-}
-
-body.light-theme .cursor-follower {
-    background-color: #6c63ff;
-}
-
-body.dark-theme .cursor {
-    border-color: #7d75ff;
-}
-
-body.dark-theme .cursor-follower {
-    background-color: #7d75ff;
-}
-
-/* Effet de clic sur le curseur */
-.cursor.clicked,
-.cursor-follower.clicked {
-    transform: translate(-50%, -50%) scale(0.7);
-    opacity: 0.8;
-    transition: transform 0.1s ease-out, opacity 0.1s ease-out;
-}
-
-/* Désactiver le curseur personnalisé sur mobile */
-@media (max-width: 768px) {
-    .cursor,
-    .cursor-follower {
-        display: none !important;
-    }
-}
-
-/* Désactiver le curseur par défaut */
-* {
-    cursor: none;
-}
-
-/* Style pour les éléments avec curseur personnalisé */
-.cursor-pointer {
-    cursor: none !important;
-    position: relative;
-}
-
-/* Réactiver le curseur pour les éléments de saisie et les liens */
-input, textarea, button, a, .cursor-disabled {
-    cursor: none !important;
-}
 
 /* ===== VARIABLES ===== */
 :root {
@@ -228,11 +136,11 @@ input, textarea, button, a, .cursor-disabled {
     --primary-color: #6c63ff;
     --primary-dark: #5549ff;
     --secondary-color: #ff6584;
-    --dark-color: #1a1a2e;
-    --darker-color: #16213e;
-    --light-color: #f8f9ff;
-    --gray-color: #6c757d;
-    --light-gray: #e9ecef;
+    --dark-color: #f8f9ff;
+    --darker-color: #e6e6ff;
+    --light-color: #3d3d3d;
+    --gray-color: #ffffff;
+    --light-gray: #2a2a3e;
     
     /* Typographie */
     --heading-font: 'Space Grotesk', sans-serif;
@@ -257,17 +165,17 @@ html {
 
 body {
     font-family: var(--body-font);
-    background-color: var(--light-color);
-    color: var(--dark-color);
+    background-color: #3d3d3d;
+    color: #f8f9ff;
     line-height: 1.7;
     overflow-x: hidden;
     transition: var(--transition);
 }
 
 body.dark-theme {
-    --light-color: #0f0f1a;
-    --dark-color: #f8f9ff;
-    --darker-color: #e6e6ff;
+    --light-color: #ad7979;
+    --dark-color: #ffffff;
+    --darker-color: #f0f0f0;
     --light-gray: #2a2a3e;
 }
 
@@ -310,16 +218,16 @@ img {
     z-index: 1000;
     padding: 1.5rem 0;
     transition: var(--transition);
-    background-color: rgba(26, 26, 46, 0.9);
+    background-color: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(170, 114, 114, 0.1);
 }
 
 .desktop-navbar.scrolled {
     padding: 1rem 0;
-    background-color: rgba(26, 26, 46, 0.95);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.95);
+    box-shadow: 0 5px 20px rgba(255, 0, 0, 0.1);
 }
 
 .desktop-navbar .navbar-container {
@@ -334,14 +242,14 @@ img {
 .desktop-navbar .logo {
     font-size: 1.8rem;
     font-weight: 700;
-    color: var(--light-color);
+    color: #000000;
     text-decoration: none;
     transition: var(--transition);
     font-family: var(--heading-font);
 }
 
 .desktop-navbar .logo span {
-    color: var(--primary-color);
+    color: #000000;
 }
 
 .desktop-navbar .nav-links {
@@ -357,7 +265,7 @@ img {
 }
 
 .desktop-navbar .nav-link {
-    color: var(--light-color);
+    color: #000000;
     text-decoration: none;
     font-size: 1rem;
     font-weight: 500;
@@ -373,13 +281,13 @@ img {
     left: 0;
     width: 0;
     height: 2px;
-    background-color: var(--primary-color);
+    background-color: #000000;
     transition: var(--transition);
 }
 
 .desktop-navbar .nav-link:hover,
 .desktop-navbar .nav-link.active {
-    color: var(--primary-color);
+    color: #000000;
 }
 
 .desktop-navbar .nav-link:hover::after,
@@ -396,10 +304,10 @@ img {
     width: 100%;
     z-index: 1000;
     padding: 1rem 0;
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(0, 0, 0, 0.95);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -482,7 +390,7 @@ img {
     width: 80%;
     max-width: 350px;
     height: 100vh;
-    background-color: #fff;
+    background-color: #3d3d3d;
     z-index: 1001;
     transition: var(--transition);
     padding: 6rem 2rem 2rem;
@@ -567,7 +475,7 @@ img {
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #3d3d3d;
     border-radius: 10px;
 }
 
@@ -583,13 +491,13 @@ img {
 
 html {
     scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) #f1f1f1;
+    scrollbar-color: var(--primary-color) #3d3d3d;
 }
 
 @supports (scrollbar-color: auto) {
     * {
         scrollbar-width: thin;
-        scrollbar-color: var(--primary-color) #f1f1f1;
+        scrollbar-color: var(--primary-color) #3d3d3d;
     }
 }
 
@@ -604,7 +512,7 @@ html {
     z-index: 1000;
     padding: 0;
     transition: width 0.3s ease, background-color 0.3s ease;
-    background: rgba(255, 255, 255, 0.98);
+    background: rgba(45, 45, 45, 0.98);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     border-radius: 20px;
     overflow: hidden;
@@ -642,7 +550,7 @@ html {
     white-space: nowrap;
     position: relative;
     z-index: 2;
-    background: white;
+    background: #3d3d3d;
     padding-right: 1.5rem;
     margin-right: -1rem; /* Pour compenser le padding du container */
     margin-bottom: 10px;
@@ -917,7 +825,7 @@ html {
         width: 80%;
         max-width: 300px;
         height: 100vh;
-        background: #fff;
+        background: #3d3d3d;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -1075,7 +983,7 @@ html {
 
 /* Thème sombre */
 body.dark-theme .navbar {
-    background-color: rgba(15, 15, 26, 0.95);
+    background-color: rgba(35, 35, 35, 0.95);
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -1219,9 +1127,9 @@ body.dark-theme .nav-link {
     width: 100%;
     height: 100vh;
     z-index: 10;
-    background-color: #f8f9ff;
+    background-color: #3d3d3d;
     box-sizing: border-box;
-    background-image: linear-gradient(135deg, rgba(108, 99, 255, 0.03) 0%, rgba(255, 255, 255, 0) 50%);
+    background-image: linear-gradient(135deg, rgba(108, 99, 255, 0.08) 0%, rgba(0, 0, 0, 0) 50%);
     position: fixed; /* Ajout de position fixe */
     top: 0;
     left: 0;
@@ -1651,7 +1559,6 @@ body.dark-theme .nav-link {
 .image-placeholder {
     width: 90%;
     height: 90%;
-    background-color: var(--light-color);
     border-radius: inherit;
     display: flex;
     align-items: center;
@@ -1768,7 +1675,7 @@ body.dark-theme .nav-link {
 /* ===== SECTION PROJETS ===== */
 .projects-section {
     padding: 100px 0;
-    background-color: #fff;
+    background-color: #3d3d3d;
     position: relative;
     z-index: 5;
 }
@@ -1807,10 +1714,10 @@ body.dark-theme .nav-link {
 }
 
 .project-card {
-    background: #fff;
+    background: #3d3d3d;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 1.150);
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -1895,7 +1802,7 @@ body.dark-theme .nav-link {
 }
 
 .project-info p {
-    color: #000000;
+    color: #e0e0e0;
     margin-bottom: 1.2rem;
     line-height: 1.6;
     flex-grow: 1;
@@ -2035,7 +1942,6 @@ body.dark-theme .nav-link {
     height: 100%;
     min-height: 400px;
     border-radius: 15px;
-    background-color: #f0f0ff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2047,7 +1953,7 @@ body.dark-theme .nav-link {
     position: absolute;
     bottom: -20px;
     right: -20px;
-    background: white;
+    background: #3d3d3d;
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -2141,10 +2047,10 @@ body.dark-theme .nav-link {
 }
 
 .skill-card {
-    background: white;
+    background: #3d3d3d;
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 5.150);
     transition: var(--transition);
     text-align: center;
 }
@@ -2445,7 +2351,7 @@ body.dark-theme .nav-link {
   }
   
   .services-box {
-    background-color: #222222;
+    background-color: #3d3d3d;
     color: white;
     width: 250px;
     padding: 30px 20px;
@@ -2579,7 +2485,6 @@ body.dark-theme .nav-link {
   .image-placeholder {
     width: 90%;
     height: 90%;
-    background: white;
     border-radius: 25% 75% 75% 25% / 25% 25% 75% 75%;
     display: flex;
     justify-content: center;
@@ -2636,7 +2541,7 @@ body.dark-theme .nav-link {
   .about-text h3 {
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
-    color: #2d2d2d;
+    color: #000000;
   }
 
   .about-text p {
@@ -2804,7 +2709,7 @@ body.dark-theme .nav-link {
 /* ===== SECTION CONTACT ===== */
 .contact-section {
     padding: 100px 0;
-    background-color: #f8f9ff;
+    background-color: #3d3d3d;
     position: relative;
     margin-top: 10vh;
     margin-bottom: 10vh;
@@ -2839,10 +2744,10 @@ body.dark-theme .nav-link {
 
 .contact-info {
     flex: 1;
-    background: #fff;
+    background: #3d3d3d;
     padding: 2.5rem;
     border-radius: 10px;
-    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 1.150);
     height: fit-content;
 }
 
@@ -2911,10 +2816,10 @@ body.dark-theme .nav-link {
 
 .contact-form {
     flex: 2;
-    background: #fff;
+    background: #3d3d3d;
     padding: 2.5rem;
     border-radius: 10px;
-    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 1.150);
 }
 
 .form-group {
@@ -3150,7 +3055,6 @@ body.dark-theme .nav-link {
 
 /* Footer */
 .footer {
-    background: #000000;
     color: #fff;
     padding: 80px 0 30px;
     position: relative;
