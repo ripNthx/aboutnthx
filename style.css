@@ -3190,10 +3190,6 @@ body.dark-theme .nav-link {
     display: flex;
     gap: 2rem;
     align-items: center;
-    margin-left: 50%;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-bottom: 4rem;
 }
 
 .footer-legal a {
