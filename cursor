@@ -1,0 +1,47 @@
+/* ===== CUSTOM CURSOR (Nothing Red Dot) ===== */
+/* ===== CUSTOM CURSOR (Nothing Red Dot) ===== */
+.cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    background-color: var(--nd-red);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 10000;
+    /* On transitionne uniquement la taille/couleur, PAS la position left/top ! */
+    transition: width 0.2s, height 0.2s, background-color 0.2s;
+    will-change: left, top;
+}
+
+.cursor-follower {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 30px;
+    height: 30px;
+    border: 1px dashed var(--nd-gray);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    /* On transitionne uniquement la taille/couleur, PAS la position left/top ! */
+    transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
+    will-change: left, top;
+}
+
+.cursor.hovered {
+    width: 12px;
+    height: 12px;
+    background-color: var(--nd-white);
+}
+
+.cursor-follower.hovered {
+    width: 45px;
+    height: 45px;
+    border-color: var(--nd-red);
+    border-style: solid;
+    background-color: rgba(215, 25, 33, 0.1);
+}

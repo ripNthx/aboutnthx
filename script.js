@@ -1,330 +1,47 @@
-// Variables globales
-let contactForm;
+// ===== VARIABLES GLOBALES =====
 const cursor = document.createElement('div');
-cursor.className = 'cursor';
 const cursorFollower = document.createElement('div');
-cursorFollower.className = 'cursor-follower';
-let mouseX = 0;
-let mouseY = 0;
-let posX = 0;
-let posY = 0;
+let mouseX = 0, mouseY = 0, posX = 0, posY = 0;
 let lastScrollPosition = 0;
 const navbar = document.querySelector('.navbar');
-const navbarDefaultWidth = '200px';
-const navbarExpandedWidth = '700px';
 
-// Ajouter le curseur au DOM
-document.body.appendChild(cursor);
-document.body.appendChild(cursorFollower);
-
-// Gérer le défilement de la page
-window.addEventListener('scroll', function() {
-    const currentScrollPosition = window.pageYOffset;
-    
-    if (currentScrollPosition <= 50) {
-        // En haut de la page, on déploie la navbar
-        navbar.classList.add('expanded');
-    } else if (currentScrollPosition > lastScrollPosition && currentScrollPosition > 50) {
-        // Défilement vers le bas, on replie la navbar
-        navbar.classList.remove('expanded');
-    }
-    
-    lastScrollPosition = currentScrollPosition;
-});
-
-// Initialiser l'état de la navbar au chargement
-if (window.pageYOffset <= 50) {
-    navbar.classList.add('expanded');
-}
-
-// Gérer le survol de la navbar
-navbar.addEventListener('mouseenter', function() {
-    if (window.pageYOffset > 50) {
-        navbar.classList.add('expanded');
-    }
-});
-
-navbar.addEventListener('mouseleave', function() {
-    if (window.pageYOffset > 50) {
-        navbar.classList.remove('expanded');
-    }
-});
-
-// Fonction pour mettre à jour la position du curseur
-function updateCursor() {
-    posX += (mouseX - posX) / 5;
-    posY += (mouseY - posY) / 5;
-    
-    cursor.style.left = mouseX + 'px';
-    cursor.style.top = mouseY + 'px';
-    cursorFollower.style.left = posX + 'px';
-    cursorFollower.style.top = posY + 'px';
-}
-
-// Écouter les mouvements de la souris
-document.addEventListener('mousemove', function(e) {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-});
-
-// Mettre à jour le curseur à chaque frame
-requestAnimationFrame(updateCursor);
-
-
-// Gestion du survol des éléments
-document.addEventListener('mouseover', function(e) {
-    // Vérifier si l'élément survolé ou l'un de ses parents a la classe cursor-pointer
-    const hoveredElement = e.target.closest('.cursor-pointer, a, button, .btn, [role="button"]');
-    if (hoveredElement) {
-        cursor.classList.add('hovered');
-        cursorFollower.classList.add('hovered');
-    } else {
-        cursor.classList.remove('hovered');
-        cursorFollower.classList.remove('hovered');
-    }
-});
-
-// Fonction pour valider l'email
-function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(String(email).toLowerCase());
-}
-
-// Fonction pour afficher une popup
-function showPopup(message, isSuccess) {
-    // Supprimer les anciennes popups
-    const oldPopup = document.querySelector('.custom-popup');
-    if (oldPopup) {
-        oldPopup.remove();
-    }
-    
-    // Créer la popup
-    const popup = document.createElement('div');
-    popup.className = `custom-popup ${isSuccess ? 'success' : 'error'}`;
-    popup.innerHTML = `
-        <div class="popup-content">
-            <i class="fas ${isSuccess ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-            <p>${message}</p>
-        </div>
-    `;
-    
-    // Ajouter la popup au document
-    document.body.appendChild(popup);
-    
-    // Supprimer la popup après 5 secondes
-    setTimeout(() => {
-        popup.classList.add('fade-out');
-        setTimeout(() => {
-            popup.remove();
-        }, 300);
-    }, 5000);
-}
-
-// Fonction d'initialisation du formulaire de contact
-function initContactForm() {
-    const contactForm = document.getElementById('contactForm');
-    if (!contactForm) {
-        console.error('Le formulaire de contact n\'a pas été trouvé dans le DOM');
-        return;
-    }
-    
-    // Gestion des champs de formulaire
-    const emailInput = contactForm.querySelector('input[type="email"]');
-    
-    // Garder le label en haut s'il y a du contenu
-    function handleInputBlur(e) {
-        const input = e.target;
-        const label = input.nextElementSibling;
-        
-        if (input.value.trim() !== '') {
-            label.classList.add('active');
-        } else {
-            label.classList.remove('active');
-        }
-        
-        // Validation spécifique pour l'email
-        if (input.type === 'email' && input.value.trim() !== '') {
-            if (!validateEmail(input.value)) {
-                input.classList.add('invalid');
-                label.style.color = '#ff6b6b';
-            } else {
-                input.classList.remove('invalid');
-                label.style.color = '#000';
-            }
-        }
-    }
-    
-    // Appliquer aux champs existants
-    const inputs = contactForm.querySelectorAll('input, textarea');
-    inputs.forEach(input => {
-        // Initialiser l'état actif si le champ a déjà une valeur
-        if (input.value.trim() !== '') {
-            input.nextElementSibling.classList.add('active');
-        }
-        
-        // Gérer le blur
-        input.addEventListener('blur', handleInputBlur);
-        
-        // Validation en temps réel pour l'email
-        if (input.type === 'email') {
-            input.addEventListener('input', function(e) {
-                if (e.target.value.trim() !== '') {
-                    if (!validateEmail(e.target.value)) {
-                        e.target.classList.add('invalid');
-                        e.target.nextElementSibling.style.color = '#ff6b6b';
-                    } else {
-                        e.target.classList.remove('invalid');
-                        e.target.nextElementSibling.style.color = '#000';
-                    }
-                }
-            });
-        }
-    });
-    
-    // Gestion de la soumission du formulaire
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        // Réinitialiser les erreurs
-        const fieldsToValidate = contactForm.querySelectorAll('input[required], textarea[required]');
-        let isValid = true;
-        
-        // Validation des champs requis
-        fieldsToValidate.forEach(field => {
-            if (!field.value.trim()) {
-                field.style.borderColor = '#ff6b6b';
-                isValid = false;
-            } else {
-                field.style.borderColor = '';
-            }
-        });
-        
-        // Validation de l'email
-        const emailField = contactForm.querySelector('input[type="email"]');
-        if (emailField) {
-            if (emailField.value.trim() === '') {
-                emailField.style.borderColor = '#ff6b6b';
-                emailField.nextElementSibling.style.color = '#ff6b6b';
-                isValid = false;
-            } else if (!validateEmail(emailField.value)) {
-                emailField.style.borderColor = '#ff6b6b';
-                emailField.nextElementSibling.style.color = '#ff6b6b';
-                isValid = false;
-            } else {
-                emailField.style.borderColor = '';
-                emailField.nextElementSibling.style.color = '#000';
-            }
-        }
-        
-        if (!isValid) {
-            showPopup('Veuillez remplir correctement tous les champs obligatoires', false);
-            return;
-        }
-        
-        // Si tout est valide, préparer les données pour EmailJS
-        const submitBtn = contactForm.querySelector('.submit-btn');
-        
-        // Désactiver le bouton pendant l'envoi et afficher l'animation
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner"></span> Envoi en cours...';
-        submitBtn.classList.add('loading');
-        
-        // Préparer les paramètres pour EmailJS
-        const templateParams = {
-            from_name: contactForm.querySelector('[name="name"]').value,
-            from_email: contactForm.querySelector('[name="email"]').value,
-            subject: 'Nouveau message depuis le portfolio',
-            message: contactForm.querySelector('[name="message"]').value
-        };
-        
-        // Envoyer l'email via EmailJS
-        emailjs.send(
-            'service_exde98a',  // Votre Service ID
-            'template_g23u835', // Votre Template ID
-            {
-                from_name: contactForm.querySelector('[name="name"]').value,
-                from_email: contactForm.querySelector('[name="email"]').value,
-                message: contactForm.querySelector('[name="message"]').value,
-                date: new Date().toLocaleDateString(),
-                title: 'Nouveau message du formulaire de contact'
-            }
-        )
-        .then(function(response) {
-            console.log('Email envoyé avec succès !', response.status, response.text);
-            showPopup('Votre message a été envoyé avec succès !', true);
-            contactForm.reset();
-        })
-        .finally(function() {
-            // Réactiver le bouton dans tous les cas
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<span>Envoyer le message</span><i class="fas fa-paper-plane"></i>';
-            submitBtn.classList.remove('loading');
-        });
-    });
-}
-
-// Initialisation au chargement du document
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialiser le formulaire de contact
-    initContactForm();
-    
-    // Initialiser le curseur personnalisé
-    initCustomCursor();
-    
-    // Initialiser le sélecteur de langue
-    initLanguageSwitcher();
-});
-
-// Création des éléments du curseur
+// ===== INITIALISATION DU CURSEUR =====
 function initCustomCursor() {
     cursor.className = 'cursor';
     cursorFollower.className = 'cursor-follower';
     document.body.appendChild(cursor);
     document.body.appendChild(cursorFollower);
-    
-    // Mise à jour de la position du curseur
+
     document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
     });
-    
-    // Animation fluide du curseur
-    function animateCursor() {
-        // Délai pour l'effet de traînée
-        const delay = 0.1;
-        posX += (mouseX - posX) * delay;
-        posY += (mouseY - posY) * delay;
-        
-        cursor.style.left = `${posX}px`;
-        cursor.style.top = `${posY}px`;
-        
-        // Délai plus long pour l'effet de traînée du follower
-        const followerX = mouseX;
-        const followerY = mouseY;
-        
-        cursorFollower.style.left = `${followerX}px`;
-        cursorFollower.style.top = `${followerY}px`;
-        
-        requestAnimationFrame(animateCursor);
+
+    function updateCursor() {
+        posX += (mouseX - posX) / 5;
+        posY += (mouseY - posY) / 5;
+
+        cursor.style.left = mouseX + 'px';
+        cursor.style.top = mouseY + 'px';
+        cursorFollower.style.left = posX + 'px';
+        cursorFollower.style.top = posY + 'px';
+
+        requestAnimationFrame(updateCursor);
     }
-    
-    // Gestion des effets de survol
-    const hoverElements = ['a', 'button', '.btn', 'input', 'textarea', 'select', 'label[for]'];
-    hoverElements.forEach(selector => {
-        document.querySelectorAll(selector).forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursor.classList.add('hovered');
-                cursorFollower.classList.add('hovered');
-            });
-            
-            el.addEventListener('mouseleave', () => {
-                cursor.classList.remove('hovered');
-                cursorFollower.classList.remove('hovered');
-            });
-        });
+    requestAnimationFrame(updateCursor);
+
+    // Effets au survol
+    document.addEventListener('mouseover', function(e) {
+        const hoveredElement = e.target.closest('.cursor-pointer, a, button, .btn, [role="button"], input, textarea');
+        if (hoveredElement) {
+            cursor.classList.add('hovered');
+            cursorFollower.classList.add('hovered');
+        } else {
+            cursor.classList.remove('hovered');
+            cursorFollower.classList.remove('hovered');
+        }
     });
-    
+
     // Cacher le curseur quand la souris quitte la fenêtre
     document.addEventListener('mouseout', (e) => {
         if (e.relatedTarget === null) {
@@ -332,230 +49,256 @@ function initCustomCursor() {
             cursorFollower.style.opacity = '0';
         }
     });
-    
     document.addEventListener('mouseover', () => {
         cursor.style.opacity = '1';
         cursorFollower.style.opacity = '1';
     });
-    
-    // Démarrer l'animation
-    animateCursor();
 }
 
-// Fonction pour initialiser le menu hamburger
+// ===== GESTION DE LA NAVBAR =====
+function initNavbar() {
+    if (!navbar) return;
+
+    window.addEventListener('scroll', function() {
+        const currentScrollPosition = window.pageYOffset;
+        if (currentScrollPosition <= 50) {
+            navbar.classList.add('expanded');
+        } else if (currentScrollPosition > lastScrollPosition && currentScrollPosition > 50) {
+            navbar.classList.remove('expanded');
+        }
+        lastScrollPosition = currentScrollPosition;
+    });
+
+    if (window.pageYOffset <= 50) navbar.classList.add('expanded');
+
+    navbar.addEventListener('mouseenter', () => {
+        if (window.pageYOffset > 50) navbar.classList.add('expanded');
+    });
+    navbar.addEventListener('mouseleave', () => {
+        if (window.pageYOffset > 50) navbar.classList.remove('expanded');
+    });
+}
+
+// ===== MENU MOBILE (HAMBURGER) =====
 function initHamburgerMenu() {
-    // Éléments du DOM
     const body = document.body;
     const hamburgerMenu = document.querySelector('.hamburger-menu');
     const hamburgerIcon = document.querySelector('.hamburger-icon');
     const mobileMenu = document.querySelector('.mobile-menu');
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-    
-    // Vérifier que tous les éléments nécessaires existent
+
     if (!hamburgerMenu || !hamburgerIcon || !mobileMenu) return;
-    
-    // Fonction pour basculer le menu
+
     const toggleMenu = () => {
         hamburgerIcon.classList.toggle('active');
         mobileMenu.classList.toggle('active');
         body.classList.toggle('menu-open');
-        
-        // Animation des liens du menu
-        if (mobileMenu.classList.contains('active')) {
-            document.querySelectorAll('.mobile-nav-links li').forEach((item, index) => {
-                item.style.transitionDelay = `${index * 0.1}s`;
-                item.style.opacity = '1';
-                item.style.transform = 'translateX(0)';
-            });
-        } else {
-            document.querySelectorAll('.mobile-nav-links li').forEach((item, index) => {
-                item.style.transitionDelay = '0s';
-                item.style.opacity = '0';
-                item.style.transform = 'translateX(20px)';
-            });
-        }
     };
-    
-    // Fonction pour fermer le menu
+
     const closeMenu = () => {
         hamburgerIcon.classList.remove('active');
         mobileMenu.classList.remove('active');
         body.classList.remove('menu-open');
-        
-        // Réinitialiser l'animation des liens
-        document.querySelectorAll('.mobile-nav-links li').forEach(item => {
-            item.style.transitionDelay = '0s';
-            item.style.opacity = '0';
-            item.style.transform = 'translateX(20px)';
-        });
     };
-    
-    // Gestion du clic sur le bouton hamburger
+
     hamburgerMenu.addEventListener('click', (e) => {
         e.stopPropagation();
         toggleMenu();
     });
-    
-    // Fermer le menu quand on clique sur un lien
-    mobileNavLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            closeMenu();
-        });
-    });
-    
-    // Fermer le menu quand on clique en dehors
+
+    mobileNavLinks.forEach(link => link.addEventListener('click', closeMenu));
+
     document.addEventListener('click', (e) => {
         const isClickInside = mobileMenu.contains(e.target) || hamburgerMenu.contains(e.target);
-        if (!isClickInside && mobileMenu.classList.contains('active')) {
-            closeMenu();
-        }
+        if (!isClickInside && mobileMenu.classList.contains('active')) closeMenu();
     });
-    
-    // Fermer le menu quand on redimensionne la fenêtre au-dessus de 768px
-    const handleResize = () => {
-        if (window.innerWidth > 768) {
-            closeMenu();
-        }
-    };
-    
-    window.addEventListener('resize', handleResize);
-    
-    // Initialiser l'état des liens du menu
-    document.querySelectorAll('.mobile-nav-links li').forEach(item => {
-        item.style.opacity = '0';
-        item.style.transform = 'translateX(20px)';
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 992) closeMenu();
     });
-    
-    // Nettoyage des écouteurs d'événements si nécessaire
-    return () => {
-        window.removeEventListener('resize', handleResize);
-        if (hamburgerMenu) {
-            hamburgerMenu.removeEventListener('click', toggleMenu);
+}
+
+// ===== ANIMATION MACHINE À ÉCRIRE =====
+function initTypingEffect() {
+    const typingText = document.querySelector('.typing-text');
+    if (!typingText) return;
+
+    const texts = ['Développeur Web', 'Créatif & Minimaliste', 'Passionné d\'architecture web'];
+    let textIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    function type() {
+        const currentText = texts[textIndex];
+        let typingSpeed = isDeleting ? 30 : 80;
+
+        if (isDeleting) {
+            typingText.textContent = currentText.substring(0, charIndex - 1);
+            charIndex--;
+        } else {
+            typingText.textContent = currentText.substring(0, charIndex + 1);
+            charIndex++;
         }
-        mobileNavLinks.forEach(link => {
-            link.removeEventListener('click', closeMenu);
+
+        if (!isDeleting && charIndex === currentText.length) {
+            typingSpeed = 2000; // Pause à la fin du mot
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            textIndex = (textIndex + 1) % texts.length;
+            typingSpeed = 500; // Pause avant le prochain mot
+        }
+
+        setTimeout(type, typingSpeed);
+    }
+    setTimeout(type, 1000);
+}
+
+// ===== UTILITAIRES (Popup & Email Validation) =====
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+}
+
+function showPopup(message, isSuccess = true) {
+    let popup = document.querySelector('.custom-popup');
+    if (popup) popup.remove();
+
+    popup = document.createElement('div');
+    popup.className = `custom-popup ${isSuccess ? 'success' : 'error'}`;
+    popup.innerHTML = `<i class="fas ${isSuccess ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+
+    document.body.appendChild(popup);
+
+    setTimeout(() => popup.classList.add('show'), 10);
+    setTimeout(() => {
+        popup.classList.remove('show');
+        setTimeout(() => popup.remove(), 300);
+    }, 5000);
+}
+
+// ===== FORMULAIRE DE CONTACT & EMAILJS =====
+function initContactForm() {
+    const contactForm = document.getElementById('contactForm');
+    if (!contactForm) return;
+
+    // Ajouter les éléments de design (focus border, erreur) pour chaque champ
+    const formGroups = contactForm.querySelectorAll('.form-group');
+    formGroups.forEach(group => {
+        const input = group.querySelector('input, textarea');
+        const label = group.querySelector('label');
+
+        const focusBorder = document.createElement('span');
+        focusBorder.className = 'focus-border';
+
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'error-message';
+
+        group.appendChild(focusBorder);
+        group.appendChild(errorMessage);
+
+        input.addEventListener('focus', () => {
+            label.classList.add('active');
+            errorMessage.textContent = '';
+            input.style.borderColor = '';
         });
-    };
-}
 
-// Fonction pour basculer la langue avec animation
-function toggleLanguage(button) {
-    console.log('Toggle language called');
-    
-    const frContent = button.querySelector('[data-lang="fr"]');
-    const enContent = button.querySelector('[data-lang="en"]');
-    
-    if (!frContent || !enContent) {
-        console.error('Éléments de langue non trouvés', { frContent, enContent });
-        return;
-    }
-    
-    console.log('Contenu trouvé:', { frContent, enContent });
-    
-    const isFrench = window.getComputedStyle(frContent).display !== 'none';
-    console.log('Langue actuelle:', isFrench ? 'français' : 'anglais');
-    
-    // Désactiver le bouton pendant l'animation
-    button.disabled = true;
-    
-    if (isFrench) {
-        // Passer à l'anglais
-        frContent.classList.add('hide');
-        setTimeout(() => {
-            frContent.style.display = 'none';
-            enContent.style.display = 'flex';
-            setTimeout(() => {
-                enContent.classList.remove('hide');
-                updateLanguage('en');
-                button.disabled = false;
-            }, 10);
-        }, 300);
-    } else {
-        // Passer au français
-        enContent.classList.add('hide');
-        setTimeout(() => {
-            enContent.style.display = 'none';
-            frContent.style.display = 'flex';
-            setTimeout(() => {
-                frContent.classList.remove('hide');
-                updateLanguage('fr');
-                button.disabled = false;
-            }, 10);
-        }, 300);
-    }
-    
-    // Ajouter un effet de pulsation sur le bouton
-    button.classList.add('animate-pulse');
-    setTimeout(() => button.classList.remove('animate-pulse'), 500);
-}
+        input.addEventListener('blur', () => {
+            if (!input.value.trim()) label.classList.remove('active');
+        });
+    });
 
-// Fonction pour mettre à jour la langue
-function updateLanguage(lang) {
-    console.log('Mise à jour de la langue vers:', lang);
-    document.documentElement.lang = lang;
-    localStorage.setItem('lang', lang);
-    
-    // Mettre à jour tous les boutons de langue
-    document.querySelectorAll('.language-btn, #mobile-language-toggle').forEach(btn => {
-        const fr = btn.querySelector('[data-lang="fr"]');
-        const en = btn.querySelector('[data-lang="en"]');
-        
-        if (fr && en) {
-            if (lang === 'en') {
-                fr.style.display = 'none';
-                en.style.display = 'flex';
-                fr.classList.remove('hide');
-                en.classList.remove('hide');
-            } else {
-                fr.style.display = 'flex';
-                en.style.display = 'none';
-                fr.classList.remove('hide');
-                en.classList.remove('hide');
+    // Fonction de validation visuelle d'un champ
+    function validateField(input) {
+        const errorElement = input.closest('.form-group').querySelector('.error-message');
+
+        if (input.hasAttribute('required') && !input.value.trim()) {
+            errorElement.textContent = 'Ce champ est requis';
+            input.style.borderColor = '#D71921';
+            return false;
+        }
+        if (input.type === 'email' && input.value && !validateEmail(input.value)) {
+            errorElement.textContent = 'Adresse email invalide';
+            input.style.borderColor = '#D71921';
+            return false;
+        }
+        errorElement.textContent = '';
+        input.style.borderColor = '';
+        return true;
+    }
+
+    // Soumission du formulaire (Vrai appel EmailJS)
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        let isValid = true;
+        const fieldsToValidate = contactForm.querySelectorAll('input[required], textarea[required]');
+
+        fieldsToValidate.forEach(field => {
+            if (!validateField(field)) isValid = false;
+        });
+
+        if (!isValid) {
+            showPopup('Veuillez vérifier les champs du formulaire.', false);
+            return;
+        }
+
+        const submitBtn = contactForm.querySelector('.submit-btn');
+        const originalBtnText = submitBtn.innerHTML;
+
+        // État de chargement
+        submitBtn.innerHTML = '<span class="btn-text">Envoi en cours...</span> <i class="fas fa-spinner fa-spin"></i>';
+        submitBtn.disabled = true;
+
+        // Vrai envoi EmailJS
+        emailjs.send(
+            'service_m6ai0xn',  // Ton Service ID actuel
+            'template_nk59iso', // ID de ton template
+            {
+                name: contactForm.querySelector('[name="name"]').value,
+                email: contactForm.querySelector('[name="email"]').value,
+                title: contactForm.querySelector('[name="subject"]').value,
+                message: contactForm.querySelector('[name="message"]').value,
+                time: new Date().toLocaleDateString()
             }
-        }
+        )
+            .then(function(response) {
+                showPopup('Message envoyé avec succès !', true);
+                contactForm.reset();
+                // Rabaisser les labels
+                contactForm.querySelectorAll('label').forEach(label => label.classList.remove('active'));
+            })
+            .catch(function(error) {
+                console.error('Erreur EmailJS:', error.text || error);
+                showPopup('Erreur lors de l\'envoi du message.', false);
+            })
+            .finally(function() {
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+            });
     });
 }
 
-// Gestion du changement de langue
-function initLanguageSwitcher() {
-    console.log('Initialisation des sélecteurs de langue...');
-    const languageToggles = [
-        document.getElementById('language-toggle'),
-        document.getElementById('mobile-language-toggle')
-    ].filter(Boolean); // Filtrer les boutons non trouvés
-    
-    if (languageToggles.length === 0) {
-        console.error('Aucun bouton de langue trouvé');
-        return;
-    }
-    
-    // Vérifier la langue sauvegardée
-    const savedLang = localStorage.getItem('lang') || 'fr';
-    console.log('Langue sauvegardée:', savedLang);
-    
-    // Mettre à jour l'affichage initial
-    updateLanguage(savedLang);
-    
-    // Initialiser les écouteurs d'événements
-    languageToggles.forEach(button => {
-        button.addEventListener('click', function(e) {
-            console.log('Clic sur le bouton de langue');
-            e.preventDefault();
-            toggleLanguage(button);
+// ===== ANIMATIONS AU DÉFILEMENT (INTERSECTION OBSERVER) =====
+function initScrollAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
         });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.skill-card, .info-item, .project-card').forEach(el => {
+        observer.observe(el);
     });
-    
-    // Définir la langue du document
-    document.documentElement.lang = savedLang || 'fr';
-    
-    console.log('Sélecteurs de langue initialisés');
 }
 
-// Gestion du bouton de retour en haut
+// ===== RETOUR EN HAUT =====
 function initBackToTop() {
     const backToTopButton = document.getElementById('back-to-top');
-    
-    // Afficher/cacher le bouton au défilement
+    if(!backToTopButton) return;
+
     window.addEventListener('scroll', function() {
         if (window.pageYOffset > 300) {
             backToTopButton.classList.add('visible');
@@ -563,224 +306,37 @@ function initBackToTop() {
             backToTopButton.classList.remove('visible');
         }
     });
-    
-    // Défilement fluide vers le haut
+
     backToTopButton.addEventListener('click', function(e) {
         e.preventDefault();
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 }
 
-// Initialisation au chargement du document
+// ===== MISE À JOUR DE L'ANNÉE =====
+function updateCurrentYear() {
+    const yearEl = document.getElementById('currentYear');
+    if(yearEl) yearEl.textContent = new Date().getFullYear();
+}
+
+// ===== INITIALISATION GLOBALE AU CHARGEMENT =====
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialiser le bouton de retour en haut
-    initBackToTop();
-    // Initialiser le curseur personnalisé
     initCustomCursor();
-    
-    // Initialiser le menu hamburger
+    initNavbar();
     initHamburgerMenu();
-    
-    // Initialiser les autres fonctionnalités
     initTypingEffect();
-    initScrollAnimations();
     initContactForm();
-    
-    // Éléments du DOM
-    const body = document.body;
-    const themeSwitch = document.getElementById('theme-switch');
-    
-    // Effet de survol sur les éléments cliquables
-    const hoverElements = ['a', 'button', '.btn', 'input', 'textarea', 'select', 'label[for]'];
-    hoverElements.forEach(selector => {
-        document.querySelectorAll(selector).forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursor.classList.add('hovered');
-                cursorFollower.classList.add('hovered');
-            });
-            
-            el.addEventListener('mouseleave', () => {
-                cursor.classList.remove('hovered');
-                cursorFollower.classList.remove('hovered');
-            });
-        });
-    });
-    
-    // Gestion du menu mobile
-    if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
-            navLinks.classList.toggle('active');
-            body.classList.toggle('no-scroll');
-            
-            // Animation du bouton hamburger
-            const spans = menuToggle.querySelectorAll('span');
-            if (menuToggle.classList.contains('active')) {
-                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-                spans[1].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-            } else {
-                spans[0].style.transform = 'rotate(0) translate(0, 0)';
-                spans[1].style.transform = 'rotate(0) translate(0, 0)';
-            }
-        });
-        
-        // Fermer le menu au clic sur un lien
-        navLinksItems.forEach(link => {
-            link.addEventListener('click', () => {
-                if (navLinks.classList.contains('active')) {
-                    menuToggle.classList.remove('active');
-                    navLinks.classList.remove('active');
-                    body.classList.remove('no-scroll');
-                    
-                    // Réinitialiser l'animation du bouton hamburger
-                    const spans = menuToggle.querySelectorAll('span');
-                    spans[0].style.transform = 'rotate(0) translate(0, 0)';
-                    spans[1].style.transform = 'rotate(0) translate(0, 0)';
-                }
-            });
-        });
-    }
-    
-    // Animation de la saisie du texte
-    function initTypingEffect() {
-        const typingText = document.querySelector('.typing-text');
-        if (!typingText) return;
-        
-        const words = ['Développeur Web', 'Designer UI/UX', 'Freelance', 'Passionné'];
-        let wordIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let isWaiting = false;
-        let typingSpeed = 100; // Vitesse de frappe de base (ms)
-        const deleteSpeed = 30; // Vitesse d'effacement (plus rapide)
-        const waitTime = 2000; // Temps d'attente entre les mots (ms)
-        
-        // Styles initiaux
-        typingText.style.display = 'inline-block';
-        typingText.style.minWidth = '300px'; // Largeur minimale pour éviter les sauts
-        typingText.textContent = '';
-        typingText.classList.add('typing'); // Ajout d'une classe pour le style du curseur
-        
-        function type() {
-            if (isWaiting) return;
-            
-            const currentWord = words[wordIndex];
-            
-            // Mise à jour du texte affiché avec le curseur
-            typingText.textContent = currentWord.substring(0, charIndex);
-            typingText.classList.add('typing'); // S'assurer que la classe est présente
-            
-            if (!isDeleting) {
-                // Mode écriture
-                charIndex++;
-                
-                if (charIndex > currentWord.length) {
-                    // Fin du mot, pause avant effacement
-                    isWaiting = true;
-                    setTimeout(() => {
-                        isWaiting = false;
-                        isDeleting = true;
-                        type();
-                    }, waitTime);
-                    return;
-                }
-            } else {
-                // Mode effacement
-                charIndex--;
-                
-                if (charIndex === 0) {
-                    // Fin de l'effacement, passer au mot suivant
-                    isDeleting = false;
-                    wordIndex = (wordIndex + 1) % words.length;
-                    // Pause avant de commencer le mot suivant
-                    isWaiting = true;
-                    setTimeout(() => {
-                        isWaiting = false;
-                        type();
-                    }, 500);
-                    return;
-                }
-            }
-            
-            // Déterminer la vitesse pour le prochain caractère
-            const speed = isDeleting ? deleteSpeed : typingSpeed + (Math.random() * 50 - 25); // Légère variation aléatoire
-            
-            // Planifier le prochain caractère
-            setTimeout(type, speed);
-        }
-        
-        // Démarrer l'animation après un court délai
-        setTimeout(type, 1000);
-        
-        // Ajout de l'animation de clignotement du curseur
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes blink {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-    
-    // Animation au défilement
-    function initScrollAnimations() {
-        const animateOnScroll = (elements, className) => {
-            elements.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
-                
-                if (elementTop < windowHeight - 100) {
-                    element.classList.add(className);
-                }
-            });
-        };
-        
-        // Observer les éléments à animer
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
-                }
-            });
-        }, { threshold: 0.1 });
-        
-        // Ajouter les éléments à observer
-        document.querySelectorAll('.skill-card, .info-item, .section-title, .section-subtitle').forEach(el => {
-            observer.observe(el);
-        });
-        
-        // Animation au chargement initial
-        window.addEventListener('load', () => {
-            animateOnScroll(document.querySelectorAll('.skill-card'), 'animate');
-            animateOnScroll(document.querySelectorAll('.info-item'), 'animate');
-        });
-        
-        // Animation au défilement
-        window.addEventListener('scroll', () => {
-            animateOnScroll(document.querySelectorAll('.skill-card'), 'animate');
-            animateOnScroll(document.querySelectorAll('.info-item'), 'animate');
-        });
-    }
-    
-    // Initialisation des fonctionnalités
-    initTypingEffect();
     initScrollAnimations();
-    initContactForm();
-    initLanguageSwitcher();
-    initMap();
-    
-    // Gestion du défilement fluide
+    initBackToTop();
+    updateCurrentYear();
+
+    // Défilement fluide pour les ancres
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
-            
+
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
                 window.scrollTo({
@@ -790,375 +346,4 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
-    // Animation de la barre de navigation au défilement
-    const navbar = document.querySelector('.navbar');
-    if (navbar) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-    }
-    
-    // Animation de frappe du texte
-    function typeWriter() {
-        const textElement = document.querySelector('.typing-text');
-        if (!textElement) return;
-        
-        const texts = [
-            'Développeur Web',
-            'Designer UI/UX',
-            'Passionné par le code',
-            'Créatif'
-        ];
-        let textIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let typingSpeed = 100;
-        let pauseEnd = 0;
-        
-        function type() {
-            const currentText = texts[textIndex];
-            
-            if (isDeleting) {
-                // Effacer le texte
-                textElement.textContent = currentText.substring(0, charIndex - 1);
-                charIndex--;
-                typingSpeed = 50;
-            } else {
-                // Écrire le texte
-                textElement.textContent = currentText.substring(0, charIndex + 1);
-                charIndex++;
-                typingSpeed = 100;
-            }
-            
-            if (!isDeleting && charIndex === currentText.length) {
-                // Pause à la fin du mot
-                typingSpeed = 2000;
-                isDeleting = true;
-            } else if (isDeleting && charIndex === 0) {
-                // Passer au mot suivant
-                isDeleting = false;
-                textIndex = (textIndex + 1) % texts.length;
-                typingSpeed = 500;
-            }
-            
-            setTimeout(type, typingSpeed);
-        }
-        
-        // Démarrer l'animation après un court délai
-        setTimeout(type, 1000);
-    }
-
-    // Fonction pour valider l'email
-    function validateEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(String(email).toLowerCase());
-    }
-
-    // Fonction pour afficher une popup
-    function showPopup(message, isSuccess = true) {
-        // Créer l'élément popup s'il n'existe pas
-        let popup = document.querySelector('.custom-popup');
-        
-        if (!popup) {
-            popup = document.createElement('div');
-            popup.className = 'custom-popup';
-            document.body.appendChild(popup);
-            
-            // Ajouter les styles CSS
-            const style = document.createElement('style');
-            style.textContent = `
-                .custom-popup {
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    padding: 20px 30px;
-                    border-radius: 8px;
-                    color: white;
-                    font-weight: 500;
-                    z-index: 9999;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    min-width: 300px;
-                    max-width: 90%;
-                    text-align: center;
-                    opacity: 0;
-                    transition: opacity 0.3s ease, transform 0.3s ease;
-                }
-                .custom-popup.show {
-                    opacity: 1;
-                    transform: translate(-50%, -50%) scale(1);
-                }
-                .custom-popup.success {
-                    background-color: #4CAF50;
-                }
-                .custom-popup.error {
-                    background-color: #f44336;
-                }
-                .custom-popup i {
-                    margin-right: 10px;
-                    font-size: 1.2em;
-                }
-            `;
-            document.head.appendChild(style);
-        }
-        
-        // Mettre à jour le contenu et le style
-        popup.className = `custom-popup ${isSuccess ? 'success' : 'error'}`;
-        popup.innerHTML = `<i class="fas ${isSuccess ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
-        
-        // Afficher la popup
-        setTimeout(() => popup.classList.add('show'), 10);
-        
-        // Cacher la popup après 5 secondes
-        setTimeout(() => {
-            popup.classList.remove('show');
-            setTimeout(() => popup.remove(), 300);
-        }, 5000);
-    }
-
-    // Gestion du formulaire de contact
-    function initContactForm() {
-        const contactForm = document.getElementById('contactForm');
-        if (!contactForm) {
-            console.error('Formulaire de contact non trouvé');
-            return;
-        }
-        
-        // Fonction pour afficher une erreur sous un champ
-        function showFieldError(input, message) {
-            const formGroup = input.closest('.form-group');
-            if (!formGroup) return;
-            
-            let errorElement = formGroup.querySelector('.error-message');
-            if (!errorElement) {
-                errorElement = document.createElement('div');
-                errorElement.className = 'error-message';
-                formGroup.appendChild(errorElement);
-            }
-            
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-            input.style.borderColor = '#f44336';
-        }
-        
-        // Fonction pour effacer les erreurs d'un champ
-        function clearFieldError(input) {
-            const formGroup = input.closest('.form-group');
-            if (!formGroup) return;
-            
-            const errorElement = formGroup.querySelector('.error-message');
-            if (errorElement) {
-                errorElement.style.display = 'none';
-            }
-            
-            input.style.borderColor = '';
-        }
-
-        // Animation des champs du formulaire
-        const formGroups = document.querySelectorAll('.form-group');
-        formGroups.forEach(group => {
-            const input = group.querySelector('input, textarea');
-            const label = group.querySelector('label');
-            const focusBorder = document.createElement('span');
-            const errorMessage = document.createElement('div');
-            
-            focusBorder.className = 'focus-border';
-            errorMessage.className = 'error-message';
-            
-            group.appendChild(focusBorder);
-            group.appendChild(errorMessage);
-
-            // Gestion du focus
-            input.addEventListener('focus', () => {
-                label.style.top = '-1.2rem';
-                label.style.fontSize = '0.8rem';
-                label.style.color = 'var(--primary-color)';
-                focusBorder.style.width = '100%';
-                errorMessage.textContent = '';
-                input.style.borderColor = '';
-            });
-
-            // Gestion du blur avec validation
-            input.addEventListener('blur', () => {
-                if (!input.value) {
-                    label.style.top = '1rem';
-                    label.style.fontSize = '1rem';
-                    label.style.color = '#999';
-                }
-                focusBorder.style.width = '0%';
-                
-                // Validation au blur
-                validateField(input, errorMessage);
-            });
-        });
-        
-        // Fonction de validation d'un champ
-        function validateField(input, errorElement) {
-            if (input.hasAttribute('required') && !input.value.trim()) {
-                errorElement.textContent = 'Ce champ est requis';
-                input.style.borderColor = '#f44336';
-                return false;
-            }
-            
-            if (input.type === 'email' && input.value && !validateEmail(input.value)) {
-                errorElement.textContent = 'Veuillez entrer une adresse email valide';
-                input.style.borderColor = '#f44336';
-                return false;
-            }
-            
-            errorElement.textContent = '';
-            input.style.borderColor = '';
-            return true;
-        }
-
-        // Soumission du formulaire
-        contactForm.addEventListener('submit', function(e) {
-            console.log('Début de la soumission du formulaire');
-            
-            // Empêcher le comportement par défaut du formulaire
-            e.preventDefault();
-            console.log('Comportement par défaut empêché');
-            
-            // Valider tous les champs
-            let isValid = true;
-            const fieldsToValidate = contactForm.querySelectorAll('input[required], textarea[required]');
-            console.log('Champs à valider:', fieldsToValidate.length);
-            
-            fieldsToValidate.forEach(field => {
-                console.log('Validation du champ:', field.name, 'valeur:', field.value);
-                const errorElement = field.closest('.form-group').querySelector('.error-message');
-                if (!validateField(field, errorElement)) {
-                    console.log('Champ invalide:', field.name);
-                    isValid = false;
-                } else {
-                    console.log('Champ valide:', field.name);
-                }
-            });
-            
-            if (!isValid) {
-                console.log('Formulaire invalide, affichage du message d\'erreur');
-                showPopup('Veuillez corriger les erreurs dans le formulaire', false);
-                return false;
-            }
-            
-            console.log('Tous les champs sont valides, préparation de l\'envoi');
-            
-            // Récupération des données du formulaire
-            const formData = new FormData(contactForm);
-            const submitBtn = contactForm.querySelector('.submit-btn');
-            const originalBtnText = submitBtn.innerHTML;
-            
-            console.log('Formulaire soumis avec les données :', formData);
-            console.log('Bouton de soumission :', submitBtn);
-            
-            // Désactiver le bouton pendant l'envoi et ajouter la classe de chargement
-            const buttonText = 'Envoi en cours...';
-            submitBtn.innerHTML = `
-                <span class="btn-text">${buttonText}</span>
-                <span class="btn-spinner"></span>
-            `;
-            submitBtn.disabled = true;
-            // Délai pour permettre au navigateur de mettre à jour le DOM
-            setTimeout(() => {
-                submitBtn.classList.add('btn-loading');
-            }, 10);
-            
-            try {
-                // Simulation d'envoi (à remplacer par un vrai appel API)
-                setTimeout(() => {
-                    // Simulation de succès ou d'échec aléatoire pour la démo
-                    const isSuccess = Math.random() > 0.3;
-                    
-                    if (isSuccess) {
-                        // Succès
-                        showPopup('Message envoyé avec succès ! Je vous recontacterai bientôt.', true);
-                        contactForm.reset();
-                    } else {
-                        // Échec
-                    }
-                }, 1500);
-            } catch (error) {
-                console.error('Erreur lors de l\'envoi du formulaire:', error);
-            } finally {
-                // S'assurer que le bouton est toujours réinitialisé
-                // Fonction pour réinitialiser le bouton
-                const resetButton = () => {
-                    submitBtn.classList.remove('btn-loading');
-                    submitBtn.innerHTML = originalBtnText;
-                    submitBtn.disabled = false;
-                };
-                
-                // Si le bouton est toujours dans le DOM, on le réinitialise
-                if (document.body.contains(submitBtn)) {
-                    // Attendre un court instant pour permettre l'animation de sortie
-                    setTimeout(resetButton, 300);
-                } else {
-                    // Si le bouton n'est plus dans le DOM, on le réinitialise immédiatement
-                    resetButton();
-                }
-            }
-            
-            // Empêcher la soumission réelle du formulaire
-            return false;
-        });
-    }
-    
-    // Initialisation de la carte (simulée avec Google Maps)
-    function initMap() {
-        const mapContainer = document.querySelector('.map-container');
-        if (!mapContainer) return;
-        
-        // Simulation de chargement de la carte
-        mapContainer.innerHTML = `
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d83998.9472260568!2d2.277019991223993!3d48.8588377395587!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e1f06e2b70f%3A0x40b82c3688c9460!2sParis!5e0!3m2!1sfr!2sfr!4v1620000000000!5m2!1sfr!2sfr" 
-                width="100%" 
-                height="450" 
-                style="border:0; border-radius: 8px;" 
-                allowfullscreen="" 
-                loading="lazy">
-            </iframe>
-        `;
-    }
-
-    // Observer pour déclencher les animations au défilement
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                if (entry.target.classList.contains('about-section')) {
-                    animateSkills();
-                }
-                entry.target.classList.add('animate');
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
-
-    // Observer les sections
-    const sections = document.querySelectorAll('section');
-    sections.forEach(section => {
-        observer.observe(section);
-    });
-
-    // Démarrer l'animation de frappe
-    typeWriter();
 });
-
-// Fonction pour mettre à jour l'année actuelle
-function updateCurrentYear() {
-    const currentYear = new Date().getFullYear();
-    document.getElementById('currentYear').textContent = currentYear;
-}
-
-// Mettre à jour l'année au chargement et au redimensionnement
-updateCurrentYear();
-window.addEventListener('resize', updateCurrentYear);

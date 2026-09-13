@@ -3,425 +3,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Portfolio de Nthx - Développeur Web Full Stack passionné par la création d'expériences numériques innovantes">
+    <meta name="description" content="Portfolio de Nthx - Développeur Web Full Stack">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <title>Nthx | Développeur Web Full Stack</title>
+    <link rel="stylesheet" href="styles.css">
+    <title>Nthx | Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Police Outfit pour l'esthétique minimaliste moderne -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="ChatGPT Image 12 août 2025, 15_41_47.png" sizes="32x32">
+</head>
 <body>
-    <!-- Formes flottantes décoratives -->
-    <div class="floating-shapes">
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-        <div class="shape shape-3"></div>
-        <div class="shape shape-4"></div>
+<!-- Formes flottantes géométriques -->
+<div class="floating-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+</div>
+
+<!-- Barre de navigation Bureau -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="#" class="logo">NTHX<span>_</span></a>
+        <ul class="nav-links">
+            <li><a href="#home" class="nav-link"><span>Accueil</span></a></li>
+            <li><a href="#about" class="nav-link"><span>À Propos</span></a></li>
+            <li><a href="#contact" class="nav-link"><span>Contact</span></a></li>
+        </ul>
     </div>
-    
-    <!-- Curseur personnalisé -->
-    
+</nav>
 
-
-    <!-- Barre de navigation Bureau -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="#" class="logo">Nthx<span>.</span></a>
-            
-            <ul class="nav-links">
-                <li><a href="#home" class="nav-link" data-text="Accueil"><span>Accueil</span></a></li>
-                <li><a href="#about" class="nav-link" data-text="À Propos"><span>À Propos</span></a></li>
-                <li><a href="#projects" class="nav-link" data-text="Projets"><span>Projets</span></a></li>
-                <li><a href="#contact" class="nav-link" data-text="Contact"><span>Contact</span></a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Barre de navigation Mobile -->
-    <nav class="mobile-navbar">
-        <div class="mobile-navbar-container">
-            <a href="#" class="mobile-logo">Nthx<span>.</span></a>
-            
-            <div class="hamburger-menu">
-                <div class="hamburger-icon">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+<!-- Barre de navigation Mobile -->
+<nav class="mobile-navbar">
+    <div class="mobile-navbar-container">
+        <a href="#" class="mobile-logo">NTHX<span>_</span></a>
+        <div class="hamburger-menu">
+            <div class="hamburger-icon">
+                <span></span><span></span><span></span>
             </div>
         </div>
-        
-        <div class="mobile-menu">
-            <ul class="mobile-nav-links">
-                <li><a href="#home" class="mobile-nav-link" data-text="Accueil"><span>Accueil</span></a></li>
-                <li><a href="#about" class="mobile-nav-link" data-text="À Propos"><span>À Propos</span></a></li>
-                <li><a href="#projects" class="mobile-nav-link" data-text="Projets"><span>Projets</span></a></li>
-                <li><a href="#contact" class="mobile-nav-link" data-text="Contact"><span>Contact</span></a></li>
-            </ul>
-        </div>
-    </nav>
-    <!-- Section Héros -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <div class="hero-text">
-                <h4 class="greeting">Salut, je suis</h4>
-                <h1 class="name">Nthx</h1>
-                <div class="typewriter">
-                    <h2 class="typing-text"></h2>
-                </div>
-                <p class="description">Je conçois et développe des expériences web exceptionnelles qui allient performance et élégance.</p>
-                
-                <div class="social-links">
-                    <a href="https://github.com/ripnthx" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="mailto:ripnthx@outlook.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-                    <a href="https://discord.com/users/ripnthx" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <div class="hero-image">
-                    <div class="profile-image">
-                        <div class="image-placeholder">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <div class="floating-elements">
-                            <span class="floating-element html"><i class="fab fa-html5"></i></span>
-                            <span class="floating-element css"><i class="fab fa-css3-alt"></i></span>
-                            <span class="floating-element js"><i class="fab fa-js"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="scroll-down">
-            <span>Défiler vers le bas</span>
-            <div class="mouse">
-                <div class="wheel"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section À Propos -->
-    <div id="about"></div>
-    <section class="about-section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title" style="top: 0vh;" id="titre-a-propos">À Propos de Moi</h2>
-            </div>
-            
-            <div class="about-content">
-                <div class="about-image">
-                    <div class="image-wrapper">
-                        <div class="main-image">
-                            <div class="image-placeholder">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="experience-badge">
-                                <span class="years">2+</span>
-                                <span class="text">Années d'expérience</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="about-text">
-                    <h3>Développeur Web Full Stack Passionné</h3>
-                    <p>Je suis un développeur web passionné par la création d'applications web modernes et réactives. Avec une solide expérience en développement front-end et back-end, je m'efforce de créer des solutions numériques élégantes et performantes.</p>
-                    
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <div class="info-icon">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <div class="info-content">
-                                <h4>Nom</h4>
-                                <p>Nthx</p>
-                            </div>
-                        </div>
-                        
-                        <div class="info-item">
-                            <div class="info-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="info-content">
-                                <h4>Email</h4>
-                                <p>ripnthx@outlook.com</p>
-                            </div>
-                        </div>
-                        
-                        <div class="info-item">
-                            <div class="info-icon">
-                                <i class="fas fa-phone-alt"></i>
-                            </div>
-                            <div class="info-content">
-                                <h4>Téléphone</h4>
-                                <p>+33 7 70 22 06 55</p>
-                            </div>
-                        </div>
-                        
-                        <div class="info-item">
-                            <div class="info-icon">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="info-content">
-                                <h4>Localisation</h4>
-                                <p>Paris, France</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="skills-section" id="skills">
-                <div class="skills-grid">
-                    <div class="skill-card">
-                        <div class="skill-icon">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <h4>Développement Web</h4>
-                        <p>Création de sites et applications web modernes et réactifs.</p>
-                    </div>
-                    
-                    <div class="skill-card">
-                        <div class="skill-icon">
-                            <i class="fas fa-mobile-alt"></i>
-                        </div>
-                        <h4>Responsive Design</h4>
-                        <p>Designs qui s'adaptent à tous les appareils.</p>
-                    </div>
-                    
-                    <div class="skill-card">
-                        <div class="skill-icon">
-                            <i class="fas fa-paint-brush"></i>
-                        </div>
-                        <h4>UI/UX Design</h4>
-                        <p>Expériences utilisateur intuitives et élégantes.</p>
-                    </div>
-                    
-                    <div class="skill-card">
-                        <div class="skill-icon">
-                            <i class="fas fa-search"></i>
-                        </div>
-                        <h4>Référencement</h4>
-                        <p>Optimisation pour les moteurs de recherche.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Section Projets -->
-    <section id="projects" class="projects-section">
-        <div class="container">
-            <h2 class="section-title">Mes Projets Récents</h2>
-            <div class="projects-grid">
-                
-                 <!-- Projet 1 -->
-                 <div class="project-card">
-                    <div class="project-image">
-                        <img src="Capture d’écran 2025-12-29 223127.png" alt="Projet 1">
-                        <div class="project-links">
-                            <a class="project-link" href="https://ripnthx.github.io/fakeytb/" target="_blank" aria-label="Voir le projet">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <h3>Site reflétant Youtube</h3>
-                        <p>Projet web conçu pour reproduire l'interface de YouTube</p>
-                        <div class="project-tech">
-                            <span>Vue.js</span>
-                            <span>js</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!--si plusieurs projets, remettre classe display: grid a .projects-grid dans css ligne 1373 ou voir débugeur google -->
-                
-
-
-                <!-- Projet 2 -->
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="portfolio.png" alt="Projet 2">
-                        <div class="project-links">
-                            <a class="project-link" target="_blank" aria-label="Voir le projet">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <h3>Portfolio</h3>
-                        <p>Une plateforme web pour afficher mes projets et mes compétences.</p>
-                        <div class="project-tech">
-                            <span>html</span>
-                            <span>css</span>
-                            <span>js</span>
-                        </div>
-                    </div>
-                </div>
-
-               
-
-                <!-- Projet 3 -->
-                <div class="project-card">
-                    <div class="project-image">
-                        <img src="europium.png" alt="Projet 3">
-                        <div class="project-links">
-
-                        </div>
-                    </div>
-                    <div class="project-info">
-                        <h3>Serveur RP minecraft</h3>
-                        <p>Un serveur RP minecraft avec un système de jobs et de missions.</p>
-                        <div class="project-tech">
-                            <span>Java</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
     </div>
-    
-    <!-- Section Contact -->
-    <section class="contact-section" id="contact">
-        <div class="container">
-            <h2 class="section-title">Contactez-moi</h2>
-            <p class="section-subtitle">N'hésitez pas à me contacter pour toute opportunité ou collaboration</p>
-            
-            <div class="contact-container">
-                <div class="contact-info">
-                    <div class="contact-method">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h3>Email</h3>
-                            <a href="mailto:ripnthx@outlook.com">ripnthx@outlook.com</a>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-method">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone-alt"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h3>Téléphone</h3>
-                            <a href="tel:+33770220655">+33 7 70 22 06 55</a>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-method">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h3>Localisation</h3>
-                            <p>Paris, France</p>
-                        </div>
-                    </div>
-                    
-                    <div class="social-media">
-                        <a href="https://github.com/ripnthx" class="social-icon" target="_blank" aria-label="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="https://twitter.com/ripnthx" class="social-icon" target="_blank" aria-label="Twitter">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="https://discord.com/users/ripnthx" class="social-icon" target="_blank" aria-label="Discord">
-                            <i class="fab fa-discord"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <form class="contact-form" id="contactForm" novalidate>
-                    <div class="form-group">
-                        <input type="text" id="name" name="name" required>
-                        <label for="name">Votre nom</label>
-                        <span class="focus-border"></span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <input type="email" id="email" name="email" required>
-                        <label for="email">Votre email</label>
-                        <span class="focus-border"></span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <input type="text" id="subject" name="subject" required>
-                        <label for="subject">Sujet</label>
-                        <span class="focus-border"></span>
-                    </div>
-                    
-                    <div class="form-group">
-                        <textarea id="message" name="message" rows="5" required></textarea>
-                        <label for="message">Votre message</label>
-                        <span class="focus-border"></span>
-                    </div>
-                    
-                    <button type="submit" class="submit-btn">
-                        <span>Envoyer le message</span>
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </form>
+    <div class="mobile-menu">
+        <ul class="mobile-nav-links">
+            <li><a href="#home" class="mobile-nav-link"><span>Accueil</span></a></li>
+            <li><a href="#about" class="mobile-nav-link"><span>À Propos</span></a></li>
+            <li><a href="#contact" class="mobile-nav-link"><span>Contact</span></a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Section Héros -->
+<section id="home" class="hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h4 class="greeting">Bonjour, je suis</h4>
+            <h1 class="name">NTHX</h1>
+            <div class="typewriter">
+                <h2 class="typing-text"></h2>
+            </div>
+            <p class="description">Je conçois et développe des expériences web exceptionnelles qui allient performance brute et minimalisme fonctionnel.</p>
+
+            <div class="social-links">
+                <a href="https://github.com/ripnthx" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="mailto:ripnthx@outlook.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                <a href="https://discord.com/users/ripnthx" target="_blank" aria-label="Discord"><i class="fab fa-discord"></i></a>
             </div>
         </div>
-    </section>
-    
-    
-    
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <a href="#" id="footer-logo" class="logo">Nthx<span>.</span></a>
-                    <p>Développeur passionné créant des expériences web exceptionnelles.</p>
-                </div>
-                
-                <div class="footer-links">
-                    <h3>Liens rapides</h3>
-                    <ul>
-                        <li><a href="#home">Accueil</a></li>
-                        <li><a href="#about">À propos</a></li>
-                        <li><a href="#skills">Compétences</a></li>
-                        <li><a href="#projects">Projets</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-contact">
-                    <h3>Contact</h3>
-                    <p><i class="fas fa-envelope"></i> ripnthx@outlook.com</p>
-                    <p><i class="fas fa-phone-alt"></i> +33 7 70 22 06 55</p>
+        <div class="hero-visual">
+            <div class="hero-image">
+                <div class="profile-image cursor-pointer">
+                    <div class="image-placeholder">
+                        <i class="fas fa-terminal"></i>
+                    </div>
+                    <!-- LE RETOUR DE LA SCANLINE -->
+                    <div class="scanline"></div>
                 </div>
             </div>
-            
+        </div>
+    </div>
+    <div class="scroll-down">
+        <span>SCROLL</span>
+        <div class="mouse"><div class="wheel"></div></div>
+    </div>
+</section>
+
+<!-- Section À Propos -->
+<section id="about" class="about-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">À Propos</h2>
+        </div>
+
+        <div class="about-content">
+            <div class="about-image">
+                <div class="image-wrapper">
+                    <div class="main-image">
+
+                        <div class="experience-badge">
+                            <span class="years">2+</span>
+                            <span class="text">Années d'exp.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-text">
+                <h3>DÉVELOPPEUR WEB FULL STACK</h3>
+                <p>Passionné par la création d'applications web modernes. Mon approche se concentre sur l'architecture du code, la performance et des interfaces radicalement épurées.</p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-id-badge"></i></div>
+                        <div class="info-content">
+                            <h4>Nom</h4>
+                            <p>Nthx</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="info-content">
+                            <h4>Email</h4>
+                            <p>ripnthx@outlook.com</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-phone"></i></div>
+                        <div class="info-content">
+                            <h4>Téléphone</h4>
+                            <p>+33 7 70 22 06 55</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="info-content">
+                            <h4>Localisation</h4>
+                            <p>Paris, FR</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="skills-section" id="skills">
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-code"></i></div>
+                    <h4>Développement Web</h4>
+                    <p>Architecture et développement d'applications robustes.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h4>Responsive Design</h4>
+                    <p>Adaptation fluide à toutes les résolutions d'écran.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-layer-group"></i></div>
+                    <h4>UI/UX Design</h4>
+                    <p>Interfaces minimalistes et interactions ciblées.</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon"><i class="fas fa-search"></i></div>
+                    <h4>Optimisation SEO</h4>
+                    <p>Performance technique et visibilité sur les moteurs.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Section Contact -->
+<section class="contact-section" id="contact">
+    <div class="container">
+        <h2 class="section-title">Contact</h2>
+        <p class="section-subtitle">N'hésitez pas à m'envoyer un message</p>
+
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="contact-method">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="contact-details">
+                        <h3>Email</h3>
+                        <a href="mailto:ripnthx@outlook.com">ripnthx@outlook.com</a>
+                    </div>
+                </div>
+
+                <div class="contact-method">
+                    <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                    <div class="contact-details">
+                        <h3>Téléphone</h3>
+                        <a href="tel:+33770220655">+33 7 70 22 06 55</a>
+                    </div>
+                </div>
+
+                <div class="contact-method">
+                    <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="contact-details">
+                        <h3>Localisation</h3>
+                        <p>Paris, FR</p>
+                    </div>
+                </div>
+            </div>
+
+            <form class="contact-form" id="contactForm" novalidate>
+                <div class="form-group">
+                    <input type="text" id="name" name="name" required>
+                    <label for="name">Nom</label>
+                    <span class="focus-border"></span>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" required>
+                    <label for="email">Email</label>
+                    <span class="focus-border"></span>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="subject" name="subject" required>
+                    <label for="subject">Sujet</label>
+                    <span class="focus-border"></span>
+                </div>
+                <div class="form-group">
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                    <label for="message">Message</label>
+                    <span class="focus-border"></span>
+                </div>
+                <button type="submit" class="submit-btn primary-btn">
+                    <span>Envoyer</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <a href="#" id="footer-logo" class="logo">NTHX<span>_</span></a>
+            </div>
             <div class="footer-bottom">
-                <p class="footer-text">&copy; <span id="currentYear"></span> Nthx. Tous droits réservés.</p>
-                <div class="footer-legal">
-                    <a href="mentions-legales.html">Mentions légales</a>
-                    <span class="separator">|</span>
-                    <a href="politique-confidentialite.html">Politique de confidentialité</a>
-                </div>
+                <p class="footer-text">&copy; <span id="currentYear"></span> NTHX. Tous droits réservés.</p>
             </div>
         </div>
-    </footer>
-    
-    <!-- Bouton de retour en haut -->
-    <button id="back-to-top" aria-label="Retour en haut">
-        <i class="fas fa-arrow-up"></i>
-    </button>
+    </div>
+</footer>
 
-    <script src="script.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script type="text/javascript">
-        (function() {
-            emailjs.init("Ed8lk-Ejlyi9RvbiD"); // Remplacez par votre clé publique EmailJS
-        })();
-    </script>
+<!-- Retour en haut -->
+<button id="back-to-top" aria-label="Retour en haut">
+    <i class="fas fa-chevron-up"></i>
+</button>
+
+<script src="script.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script type="text/javascript">
+    (function() {
+        emailjs.init("C5Tu7gTeOIxgUKCGz");
+    })();
+</script>
 </body>
 </html>
